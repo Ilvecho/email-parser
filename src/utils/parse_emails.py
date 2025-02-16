@@ -1,49 +1,33 @@
+import re
 from bs4 import BeautifulSoup
 import requests
 import os
 from urllib.parse import urljoin, urlparse
 
-def recursive_function(table):
-
-    print("################ IN RECURSIVE FUNCTION ######################")
-
-    # Since the input is a <table>, we expect it to have rows and data. We cycle through them 
-    for tr in table.find_all("tr", recursive=False):  # Only direct <tr> children
-        for td in tr.find_all("td", recursive=False):  # Only direct <td> children
-            
-            # Cycle through the tags of the TD 
-            for tag in td.children:
-                if tag.name == "h3":
-                    print(f'H3 found: {tag}')
-                elif tag.name == "h6":
-                    print(f'H6 found: {tag}')
-                elif tag.name == "p":
-                    print(f'P found: {tag}')
-                elif tag.name == "table":
-                    print("TABLE")
-                    ok = recursive_function(tag)
-                else:
-                    if tag.name:
-                        print(f'Tag Name: {tag.name}')
-                    print(f'Tag: {tag}')
-
-    return True
 
 class ParseEmails:
 
     def __init__(self):
         pass
 
-    def parse_email_body(self, message, from_address):
+    def parse_email_body(self, message, from_address, email_dir):
 
         # The emails are made of multiple parts, one of which is HTML and it's the one we are interested in
         for part in message.walk():
 
             content_type = part.get_content_type()
-            
+
             try:
-                # Use the HTML version of the email - it is easier to parse
-                if content_type == "text/html":
+                # # Use the HTML version of the email - it is easier to parse <- Actually it's not, it's a shitshow
+                # if content_type == "text/html":
+                #     charset = part.get_content_charset()  # Get the correct encoding
+                #     if charset is None:
+                #         charset = "utf-8"  # Default to UTF-8 if unknown
+                    
+                #     content = part.get_payload(decode=True).decode(charset, errors="replace")
+                
+                if content_type == "text/plain":
+                    # Get text
                     charset = part.get_content_charset()  # Get the correct encoding
                     if charset is None:
                         charset = "utf-8"  # Default to UTF-8 if unknown
@@ -58,61 +42,202 @@ class ParseEmails:
         if from_address == "news@daily.therundown.ai":
             content = self.rundown_ai(content)
 
+        elif from_address == "dan@tldrnewsletter.com":
+            content = self.tldr(content)
+
+        elif from_address == "joe@readthejoe.com":
+            content = self.average_joe(content)
+
+        elif from_address == "news@myanalitica.it":
+            content = self.analitica(content)
+
+        elif from_address == "theneuron@newsletter.theneurondaily.com":
+            content = self.neuron(content)
+
         return content
     
     # Rundown AI
     def rundown_ai(self, content):
 
-        soup = BeautifulSoup(content, 'html.parser')
-        soup = soup.find("body")
+        # Isolate only the part that is relevant
+        content = content.split("**Good morning, AI enthusiasts.** ")[-1].split("**COMMUNITY**")[0]
 
-        for tag in soup.div.children:
+        # Remove the links
+        pattern = r'\(http.*?\)'
+        content = re.sub(pattern, '', content)
 
-            if tag.name == "table":
-                ok = recursive_function(tag)
+        # Remove the sponsored parts
+        pattern = r'###### TOGETHER WITH.*?----------'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-                if ok:
-                    print('PORCODDIO')
+        pattern = r'###### AI TRAINING.*?----------'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-            else:
-                if tag.name == "div":
-                    print(tag)
-                elif tag.name:
-                    print(f'Tag Name: {tag.name}')
-                else:
-                    print(f'Tag: {tag}')
+        pattern = r'###### PRESENTED BY.*?----------'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-        return "dhn"
+        # Remove Trending tools & Jobs
+        pattern = r'### 🛠️ _\*\*\[Trending AI Tools\]\*\*_.*?----------'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-        # Find all cells that contain a header
-        # We need to use an auxiliary function to do it, it is defined above outside the class
-        header_cells = soup.find_all(contains_header) # <- THIS IS STILL NOT WORKING PORCODDIO CANE MADONNA PUTTANA
-        
-        for header_cell in header_cells:
-            # Get the section title from the header
-            header = header_cell.find(['h3', 'h6'])
-            section_title = header.get_text().strip()
-                
-            if "presented by" in section_title or "together with" in section_title:
-                continue
-            # Only process this section if it's of interest
-            else:
-                print("#########################")
-                print(section_title)
-                print(header_cell)
-                break
+        pattern = r'### 💼 _\*\*\[AI Job Opportunities\]\*\*_.*?----------'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)        
 
-                # Get all following sibling tds in the same row
-                content_parts = []
-                current_cell = header_cell.find_next_sibling('td')
-                
-                while current_cell:
-                    content = current_cell.get_text().strip()
-                    if content:  # Only add non-empty content
-                        content_parts.append(content)
-                    current_cell = current_cell.find_next_sibling('td')
+        # Remove some empty substrings
+        content = content.replace("----------", "") 
+        content = content.replace("**QUICK HITS**", "")
+        content = content.replace("\r\n\r\n", "\n")
+        content = content.replace("\n\n", "\n")
 
-                print('\n'.join(content_parts))
-
-        print("Success!")
         return content
+    
+    # TL;DR
+    def tldr(self, content):
+
+        # Isolate only the part that is relevant
+        content = content.split("BIG TECH & STARTUPS")[-1].split("Love TLDR?")[0]
+
+
+        # Remove leading and trailing whitespace characters
+        text = content.strip()
+
+        # Remove empty lines while keeping paragraph separation
+        paragraphs = text.split('\r\n')
+        cleaned_paragraphs = []
+
+        for paragraph in paragraphs:
+            # Remove newline characters within paragraphs
+            cleaned_paragraph = ' '.join(paragraph.split())
+            cleaned_paragraphs.append(cleaned_paragraph)
+
+        cleaned_paragraphs = [paragraph.strip() if len(paragraph) != 0 else "\n"  for paragraph in cleaned_paragraphs]
+        # Join the cleaned paragraphs with double newlines to keep separation
+        content = ''.join(cleaned_paragraphs)
+
+        # Remove the parentheses with the reading time
+        content = re.sub(r'\(\d+\s?MINUTE\s?READ\)', '', content)
+
+        # Remove the links numbers
+        content = re.sub(r'\[\d+\]', '', content)
+
+        return content
+
+    # The Average Joe
+    def average_joe(self, content):
+
+        content = content.split("EXTRA")[0].strip()
+        content = content.split("Good morning.")[-1].strip()
+
+        # Remove the links
+        pattern = r'\[http.*?\]'
+        content = re.sub(pattern, '', content)
+
+        # Remove the stock symbols
+        pattern = r'\(\s?\$.*?\)'
+        content = re.sub(pattern, '', content)
+
+        # Remove empty lines while keeping paragraph separation
+        paragraphs = content.split('\r\n')
+        cleaned_paragraphs = []
+
+        for paragraph in paragraphs:
+            # Remove newline characters within paragraphs
+            cleaned_paragraph = ' '.join(paragraph.split())
+            cleaned_paragraphs.append(cleaned_paragraph)
+
+        cleaned_paragraphs = [paragraph.strip() if len(paragraph) != 0 else "\n\n"  for paragraph in cleaned_paragraphs]
+        # Join the cleaned paragraphs with double newlines to keep separation
+        content = ''.join(cleaned_paragraphs)
+
+        # Remove the Partnership
+        pattern = r'PARTNERED WITH.*?LARGECAP RECAP'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        pattern = r"JOE'S MARKET PULSE.*?Markets & Economy"
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        pattern = r"PARTNERED WITH.*?CHART"
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        pattern = r"PARTNERED.*?SUNDAY"
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        # Some other clean up
+        content = content.replace("[ Read ]", "")
+        content = content.replace(" OF THE DAY DIGIT OF THE DAY", "")
+        content = re.sub(r'\n\s*?\n\s*?\n\s*?\n\s*?', '\n\n', content)
+        content = content.replace("*Thanks to our sponsors for keeping the newsletter free.", "")
+
+        return content.strip()
+
+    # Analitica
+    def analitica(self, content):
+
+        content = content.split("Buona lettura!")[-1].strip()
+        content = content.split("Uno sguardo ai mercati")[0].strip()
+
+        # Remove the links
+        pattern = r'http.*?[\s\n]'
+        content = re.sub(pattern, '', content)
+
+        # Remove non interesting sections
+        pattern = r'Video YouTube.*?Notizie'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        pattern = r'In collaborazione con.*?News'
+        content = re.sub(pattern, 'News', content, flags=re.DOTALL)
+
+        pattern = r'La trimestrale.*?Extra'
+        content = re.sub(pattern, 'Extra', content, flags=re.DOTALL)
+
+        # Remove empty lines while keeping paragraph separation
+        paragraphs = content.split('\r\n')
+        cleaned_paragraphs = []
+
+        for paragraph in paragraphs:
+            # Remove newline characters within paragraphs
+            cleaned_paragraph = ' '.join(paragraph.split())
+            cleaned_paragraphs.append(cleaned_paragraph)
+
+        cleaned_paragraphs = [paragraph.strip() if len(paragraph) > 2 else "\n"  for paragraph in cleaned_paragraphs]
+        # Join the cleaned paragraphs with double newlines to keep separation
+        content = ''.join(cleaned_paragraphs)
+
+        return content.strip()
+
+    # The Neuron
+    def neuron(self, content):
+
+        content = content.split("Welcome, humans. ")[-1].strip()
+        content = content.split("# A Cat's Commentary.")[0].strip()
+
+        # Remove the links
+        pattern = r'\(http.*?\)'
+        content = re.sub(pattern, '', content)
+        pattern = r'\(s:.*?\)'
+        content = re.sub(pattern, '', content)
+        # pattern = r'(//.*?)'
+        # content = re.sub(pattern, '', content)
+        pattern = r'\(www.*?/\)'
+        content = re.sub(pattern, '', content)
+        # pattern = r'(.*?/)'
+        # content = re.sub(pattern, '', content)
+
+        # Remove the images
+        pattern = r'View image:.*?Caption:.*?\n'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        # Remove empty lines while keeping paragraph separation
+        paragraphs = content.split('\r\n')
+        cleaned_paragraphs = []
+
+        for paragraph in paragraphs:
+            # Remove newline characters within paragraphs
+            cleaned_paragraph = ' '.join(paragraph.split())
+            cleaned_paragraphs.append(cleaned_paragraph)
+
+        cleaned_paragraphs = [paragraph.strip() if len(paragraph) > 2 else "\n"  for paragraph in cleaned_paragraphs]
+        # Join the cleaned paragraphs with double newlines to keep separation
+        content = ''.join(cleaned_paragraphs)
+
+        return content.strip()

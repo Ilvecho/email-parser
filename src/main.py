@@ -23,7 +23,7 @@ TARGET_ADDRESS_ENG = [
 ]
 
 TARGET_ADDRESS_ITA = [
-    "team@ilpuntonewsletter.com",                   # Il Punto - Economia Italiana (ITA)
+    # "team@ilpuntonewsletter.com",                   # Il Punto - Economia Italiana (ITA) <- Too unpredictable and with several meaningful images, not worth parsing
     "news@myanalitica.it",                          # My Analitica di Pietro Michelangeli - Finanza (ITA)
     "community@datapizza.it"                        # Datapizza - AI e Data Science (ITA)
 ]
@@ -120,10 +120,6 @@ class YahooEmailExtractor:
                     else:
                         subject += str(part)
 
-                # Create a unique directory for each email
-                email_dir = save_path / f"email_{email_id.decode()}"
-                os.makedirs(email_dir / "images", exist_ok=True)
-
                 newsletters.append({
                     'subject': subject,
                     'from': from_address
@@ -131,17 +127,25 @@ class YahooEmailExtractor:
 
                 # print("\n####################")
                 # print(str(newsletters[-1]))
+
+                # Create a unique directory for each email
+                email_dir = save_path / f"email_{email_id.decode()}"
+                os.makedirs(email_dir, exist_ok=True)
                 
                 # Extract content and create summary
                 parser = ParseEmails()
-                content = parser.parse_email_body(message, from_address)
+                content = parser.parse_email_body(message, from_address, email_dir)
 
-                # Save HTML summary
-                summary_path = os.path.join(email_dir, 'summary.html')
+                # # Save HTML summary
+                # summary_path = os.path.join(email_dir, 'summary.html')
+                # with open(summary_path, 'w', encoding='utf-8') as f:
+                #     f.write(content)
+
+                # Save TXT summary
+                summary_path = os.path.join(email_dir, 'summary.txt')
                 with open(summary_path, 'w', encoding='utf-8') as f:
                     f.write(content)
                 
-
             except Exception as e:
                 print(f"Error processing email {email_id}: {str(e)}")
                 continue
@@ -155,21 +159,21 @@ class YahooEmailExtractor:
 # Example usage
 if __name__ == "__main__":
 
-    # EMAIL = os.getenv("EMAIL")
-    # APP_PASSWORD = os.getenv("APP_PASSWORD")
+    EMAIL = os.getenv("EMAIL")
+    APP_PASSWORD = os.getenv("APP_PASSWORD")
     
-    # extractor = YahooEmailExtractor(EMAIL, APP_PASSWORD)
+    extractor = YahooEmailExtractor(EMAIL, APP_PASSWORD)
     
-    # if extractor.connect():
-    #     save_path = Path(__file__).parent / "email_content"
-    #     extractor.parse_emails(num_emails=10, save_path=save_path)
-    #     extractor.disconnect()
-    #     print("Email content extraction completed!")
+    if extractor.connect():
+        save_path = Path(__file__).parent / "email_content"
+        extractor.parse_emails(num_emails=10, save_path=save_path)
+        extractor.disconnect()
+        print("Email content extraction completed!")
 
-    file_path = Path("C:/Users/massi/Documents/PythonProjects/email-parser/src/email_content/email_1780/summary.html")
+    # file_path = Path("C:/Users/massi/Documents/PythonProjects/email-parser/src/email_content/email_1780/summary.html")
 
-    with open(file_path, 'r', encoding='utf-8') as file:
-        html_content = file.read()
+    # with open(file_path, 'r', encoding='utf-8') as file:
+    #     html_content = file.read()
 
-    parser = ParseEmails()
-    _ = parser.rundown_ai(html_content)
+    # parser = ParseEmails()
+    # _ = parser.rundown_ai(html_content)
