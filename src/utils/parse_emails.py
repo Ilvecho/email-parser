@@ -1,31 +1,20 @@
 import re
-from bs4 import BeautifulSoup
-import requests
-import os
-from urllib.parse import urljoin, urlparse
-
 
 class ParseEmails:
 
-    def __init__(self):
-        pass
+    def __init__(self, save_dir):
+        self.save_dir = save_dir
 
-    def parse_email_body(self, message, from_address, email_dir):
+    def parse_email_body(self, message, from_address):
 
-        # The emails are made of multiple parts, one of which is HTML and it's the one we are interested in
+        # The emails are made of multiple parts, one of which is TXT and it's the one we are interested in
         for part in message.walk():
 
+            # Get the content from the plain text version
             content_type = part.get_content_type()
 
             try:
-                # # Use the HTML version of the email - it is easier to parse <- Actually it's not, it's a shitshow
-                # if content_type == "text/html":
-                #     charset = part.get_content_charset()  # Get the correct encoding
-                #     if charset is None:
-                #         charset = "utf-8"  # Default to UTF-8 if unknown
-                    
-                #     content = part.get_payload(decode=True).decode(charset, errors="replace")
-                
+                # Use the plain text version of the email
                 if content_type == "text/plain":
                     # Get text
                     charset = part.get_content_charset()  # Get the correct encoding
@@ -40,24 +29,25 @@ class ParseEmails:
         
         # Use a switch to invoke the different parsers for each email 
         if from_address == "news@daily.therundown.ai":
-            content = self.rundown_ai(content)
+            ok = self.rundown_ai(content)
 
         elif from_address == "dan@tldrnewsletter.com":
-            content = self.tldr(content)
+            ok = self.tldr(content)
 
         elif from_address == "joe@readthejoe.com":
-            content = self.average_joe(content)
+            ok = self.average_joe(content)
 
         elif from_address == "theneuron@newsletter.theneurondaily.com":
-            content = self.neuron(content)
+            ok = self.neuron(content)
         
         elif from_address == "news@myanalitica.it":
-            content = self.analitica(content)
+            ok = self.analitica(content)
 
         elif from_address == "community@datapizza.it":
-            content = self.datapizza(content)
+            ok = self.datapizza(content)
 
-        return content
+        if not ok: 
+            raise("Some errors during the parsing of the email")
     
     # Rundown AI
     def rundown_ai(self, content):
@@ -92,7 +82,12 @@ class ParseEmails:
         content = content.replace("\r\n\r\n", "\n")
         content = content.replace("\n\n", "\n")
 
-        return content
+        # Save TXT summary
+        target_path = self.save_dir / "english.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f'\n\n\n#\n\nThe Rundown AI\n\n{content.strip()}')
+
+        return True
     
     # TL;DR
     def tldr(self, content):
@@ -123,7 +118,12 @@ class ParseEmails:
         # Remove the links numbers
         content = re.sub(r'\[\d+\]', '', content)
 
-        return content
+        # Save TXT summary
+        target_path = self.save_dir / "english.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f"\n\n\n#\n\nToo Long; Don't Read\n\n{content.strip()}")
+
+        return True
 
     # The Average Joe
     def average_joe(self, content):
@@ -171,7 +171,12 @@ class ParseEmails:
         content = re.sub(r'\n\s*?\n\s*?\n\s*?\n\s*?', '\n\n', content)
         content = content.replace("*Thanks to our sponsors for keeping the newsletter free.", "")
 
-        return content.strip()
+        # Save TXT summary
+        target_path = self.save_dir / "english.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f'\n\n\n#\n\nThe Average Joe\n\n{content.strip()}')
+
+        return True
 
     # The Neuron
     def neuron(self, content):
@@ -192,11 +197,11 @@ class ParseEmails:
         # content = re.sub(pattern, '', content)
 
         # Remove the images
-        pattern = r'View image:.*?Caption:.*?\n'
+        pattern = r'View image:.*?Caption:'
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
         # Remove the partnerships
-        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*#.*#'
+        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?#'
         content = re.sub(pattern, '#', content, flags=re.DOTALL)
 
         # Remove Treats to try
@@ -228,7 +233,12 @@ class ParseEmails:
         # Join the cleaned paragraphs with double newlines to keep separation
         content = ''.join(cleaned_paragraphs)
 
-        return content.strip()
+        # Save TXT summary
+        target_path = self.save_dir / "english.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f'\n\n\n#\n\nThe Neuron\n\n{content.strip()}')
+
+        return True
     
     # Analitica
     def analitica(self, content):
@@ -263,7 +273,12 @@ class ParseEmails:
         # Join the cleaned paragraphs with double newlines to keep separation
         content = ''.join(cleaned_paragraphs)
 
-        return content.strip()
+        # Save TXT summary
+        target_path = self.save_dir / "italiano.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f'\n\n\n#\n\nAnalitica\n\n{content.strip()}')
+
+        return True
 
     # Datapizza
     def datapizza(self, content):
@@ -305,12 +320,6 @@ class ParseEmails:
         pattern = r"---------------------------.*?By.*?alt=''''"
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-        # pattern = r'In collaborazione con.*?News'
-        # content = re.sub(pattern, 'News', content, flags=re.DOTALL)
-
-        # pattern = r'La trimestrale.*?Extra'
-        # content = re.sub(pattern, 'Extra', content, flags=re.DOTALL)
-
         # Remove empty lines while keeping paragraph separation
         paragraphs = content.split('\r\n')
         cleaned_paragraphs = []
@@ -328,7 +337,12 @@ class ParseEmails:
 
         content = '\n'.join(content.split('\n')[:-2])
 
-        return content.strip()
+        # Save TXT summary
+        target_path = self.save_dir / "italiano.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f'\n\n\n#\n\nDatapizza\n\n{content.strip()}')
+
+        return True
 
 
 
