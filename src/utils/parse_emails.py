@@ -95,12 +95,32 @@ class ParseEmails:
         # Isolate only the part that is relevant
         content = content.split("BIG TECH & STARTUPS")[-1].split("Love TLDR?")[0]
 
-
-        # Remove leading and trailing whitespace characters
-        text = content.strip()
+        # Remove emojis
+        emoji_pattern = re.compile("["
+            u"\U0001F600-\U0001F64F"  # emoticons
+            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+            u"\U0001F680-\U0001F6FF"  # transport & map symbols
+            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+            u"\U00002702-\U000027B0"  # dingbats
+            u"\U000024C2-\U0001F251"  # misc symbols
+            u"\U0000FE0F"  # variation selector
+            u"\U0000231A-\U0000231B"  # watch symbols
+            u"\U000023E9-\U000023EC"  # play/pause symbols
+            u"\U000023F0-\U000023F3"  # clock symbols
+            u"\U000023F8-\U000023FA"  # media symbols
+            u"\U00002300-\U000023FF"  # technical symbols
+            u"\U00002600-\U000027BF"  # misc symbols and arrows
+            u"\U00002934-\U00002935"  # arrow symbols
+            u"\U00002B05-\U00002B07"  # arrow symbols
+            u"\U00002B1B-\U00002B1C"  # square symbols
+            u"\U00002B50-\U00002B55"  # star symbols
+            "]+", flags=re.UNICODE)
+        
+        # Remove emojis
+        content = emoji_pattern.sub('', content)
 
         # Remove empty lines while keeping paragraph separation
-        paragraphs = text.split('\r\n')
+        paragraphs = content.split('\n')
         cleaned_paragraphs = []
 
         for paragraph in paragraphs:
@@ -117,6 +137,46 @@ class ParseEmails:
 
         # Remove the links numbers
         content = re.sub(r'\[\d+\]', '', content)
+
+        # Remove some remaining double spaces
+        content = re.sub(r'\r\n', '', content)
+
+        # Keep only the titles
+        # Step 1: Split at the substring while preserving it in one part
+        split_text = "SCIENCE & FUTURISTIC TECHNOLOGY"
+        split_index = content.find(split_text)
+        
+        if split_index == -1:
+            return False
+        
+        first_part = content[:split_index + len(split_text)]
+        first_part = first_part.replace(split_text, "OTHER NEWS")
+        second_part = content[split_index + len(split_text):]
+        
+        # Step 2: Process the second part line by line
+        lines = second_part.strip().split('\n')
+        
+        # Filter to keep only all-caps lines
+        all_caps_lines = []
+
+        for line in lines:
+            # Check if line is non-empty and all uppercase
+            if line.strip() and line.strip() == line.strip().upper():
+                all_caps_lines.append(line)
+        
+        # Step 3: Remove lines with specified substrings
+        forbidden_substrings = ["(SPONSOR)", "(GITHUB REPO)", "(WEBSITE)", "PROGRAMMING, DESIGN & DATA SCIENCE", "MISCELLANEOUS", "QUICK LINKS"]
+        filtered_lines = []
+        
+        for line in all_caps_lines:
+
+            if len(filtered_lines) == 0: 
+                filtered_lines.append('\n' + line + '\n')
+            elif not any(substring in line for substring in forbidden_substrings):
+                filtered_lines.append(line + '\n')
+        
+        filtered_second_part = '\n'.join(filtered_lines)
+        content = '\n'.join([first_part, filtered_second_part])
 
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
