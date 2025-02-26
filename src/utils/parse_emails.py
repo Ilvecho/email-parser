@@ -214,10 +214,10 @@ class ParseEmails:
 
         # Remove the Partnership
         pattern = r'PARTNERED WITH.*?LARGECAP RECAP'
-        content = re.sub(pattern, '', content, flags=re.DOTALL)
+        content = re.sub(pattern, 'LARGECAP RECAP\n', content, flags=re.DOTALL)
 
         pattern = r"JOE'S MARKET PULSE.*?Markets & Economy"
-        content = re.sub(pattern, '', content, flags=re.DOTALL)
+        content = re.sub(pattern, 'Markets & Economy\n', content, flags=re.DOTALL)
 
         pattern = r"PARTNERED WITH.*?CHART"
         content = re.sub(pattern, '', content, flags=re.DOTALL)
@@ -230,6 +230,92 @@ class ParseEmails:
         content = content.replace(" OF THE DAY DIGIT OF THE DAY", "")
         content = re.sub(r'\n\s*?\n\s*?\n\s*?\n\s*?', '\n\n', content)
         content = content.replace("*Thanks to our sponsors for keeping the newsletter free.", "")
+
+        ####################################
+        ##### Remove undesired content #####
+        ####################################
+
+        # First part: keep introduction and the title of the long article
+        first_part, second_part = content.split("LARGECAP RECAP\n")
+
+        lines = first_part.split('\n')
+        cont = 0
+        lines_of_interest = []
+        for line in lines: 
+
+            if cont == 2:
+                break
+            if not line.strip():
+                continue
+            else: 
+                lines_of_interest.append(line)
+                cont += 1
+
+        first_part = "\n\n".join(lines_of_interest)
+
+        # Second part: there are two articles whose title starts with an emoji. Keep only the title
+        second_part, third_part = second_part.split('Markets & Economy')
+
+        lines = second_part.split("\n")
+        emoji_pattern = re.compile(
+            "["
+            "\U0001F600-\U0001F64F"  # emoticons
+            "\U0001F300-\U0001F5FF"  # symbols & pictographs
+            "\U0001F680-\U0001F6FF"  # transport & map symbols
+            "\U0001F700-\U0001F77F"  # alchemical symbols
+            "\U0001F780-\U0001F7FF"  # Geometric Shapes
+            "\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
+            "\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
+            "\U0001FA00-\U0001FA6F"  # Chess Symbols
+            "\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
+            "\U00002702-\U000027B0"  # Dingbats
+            "\U000024C2-\U0000257F"  # Enclosed characters
+            "\U00002600-\U000026FF"  # Miscellaneous Symbols
+            "\U00002700-\U000027BF"  # Dingbats
+            "\U0000FE0F"             # Variation Selector
+            "\U0001F1E0-\U0001F1FF"  # Flags (iOS)
+            "]+", 
+            flags=re.UNICODE
+        )
+        
+        # Filter lines that start with an emoji
+        emoji_lines = []
+        for line in lines:
+            # Skip empty lines
+            if not line.strip():
+                continue
+                
+            # Check if the line starts with an emoji
+            if emoji_pattern.match(line.strip()):
+                temp = emoji_pattern.sub('', line)
+                emoji_lines.append(temp.strip())
+        
+        # Join the filtered lines and return
+        second_part = '\n\n'.join(emoji_lines)    
+
+        # Third part: Keep only the title, except when mentioning EU or Europe
+        third_part, fourth_part = third_part.split("CHART")
+
+        lines_of_interest = []
+        for line in third_part.split("\n"):
+
+            # Skip empty lines or unexpected ones
+            if not line.strip() or ":" not in line:
+                continue
+            
+            title, _ = line.split(':')
+
+            if "EU" in title or "europe" in title.lower():
+                lines_of_interest.append(line.strip())
+            else: 
+                lines_of_interest.append(title.strip())
+
+        third_part = '\n\n'.join(lines_of_interest)
+
+        # Fourth part: keep only the title
+        fourth_part = fourth_part.split('\n')[0].strip()
+
+        content = '\n\n'.join([first_part, second_part, third_part, fourth_part])
 
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
