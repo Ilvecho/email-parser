@@ -59,6 +59,18 @@ class ParseEmails:
         pattern = r'\(http.*?\)'
         content = re.sub(pattern, '', content)
 
+        # Remove the intro
+        pattern = r'———————————————————————————.*?\*\*LATEST DEVELOPMENTS\*\*'
+        content = re.sub(pattern, '', content, flags=re.DOTALL)
+
+        # Remove images
+        pattern = r'\n#### .*?\*\*The Rundown:'
+        content = re.sub(pattern, '\n \n', content, flags=re.DOTALL)
+
+        # Remove details
+        pattern = r'\*\*The details.*?Why'
+        content = re.sub(pattern, 'Why', content, flags=re.DOTALL)
+
         # Remove the sponsored parts
         pattern = r'###### TOGETHER WITH.*?----------'
         content = re.sub(pattern, '', content, flags=re.DOTALL)
@@ -81,6 +93,12 @@ class ParseEmails:
         content = content.replace("**QUICK HITS**", "")
         content = content.replace("\r\n\r\n", "\n")
         content = content.replace("\n\n", "\n")
+        content = content.replace("\n ", "\n")
+        content = content.replace("\r ", "\n")
+        content = content.replace("[", "")
+        content = content.replace("]", "")
+        content = content.replace("_", "")
+        content = content.replace("**", "")
 
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
@@ -130,7 +148,7 @@ class ParseEmails:
 
         cleaned_paragraphs = [paragraph.strip() if len(paragraph) != 0 else "\n"  for paragraph in cleaned_paragraphs]
         # Join the cleaned paragraphs with double newlines to keep separation
-        content = ''.join(cleaned_paragraphs)
+        content = ' '.join(cleaned_paragraphs)
 
         # Remove the parentheses with the reading time
         content = re.sub(r'\(\d+\s?MINUTE\s?READ\)', '', content)
@@ -165,7 +183,7 @@ class ParseEmails:
                 all_caps_lines.append(line)
         
         # Step 3: Remove lines with specified substrings
-        forbidden_substrings = ["(SPONSOR)", "(GITHUB REPO)", "(WEBSITE)", "PROGRAMMING, DESIGN & DATA SCIENCE", "MISCELLANEOUS", "QUICK LINKS"]
+        forbidden_substrings = ["(SPONSOR)", "(GITHUB REPO)", "(WEBSITE)", "PROGRAMMING, DESIGN & DATA SCIENCE", "MISCELLANEOUS", "QUICK LINKS", "HIRING"]
         filtered_lines = []
         
         for line in all_caps_lines:
@@ -177,6 +195,8 @@ class ParseEmails:
         
         filtered_second_part = '\n'.join(filtered_lines)
         content = '\n'.join([first_part, filtered_second_part])
+
+        content = content.replace("\n ", "\n")
 
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
@@ -346,6 +366,10 @@ class ParseEmails:
         pattern = r'View image:.*?Caption:'
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
+        # Remove the agenda
+        pattern = r'\*\*Here’s what you need to know about AI today.*?#'
+        content = re.sub(pattern, '\r\n   \r\n#', content, flags=re.DOTALL)
+
         # Remove the partnerships
         pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?#'
         content = re.sub(pattern, '#', content, flags=re.DOTALL)
@@ -378,6 +402,10 @@ class ParseEmails:
         cleaned_paragraphs = [paragraph.strip() if len(paragraph) > 2 else "\n"  for paragraph in cleaned_paragraphs]
         # Join the cleaned paragraphs with double newlines to keep separation
         content = ''.join(cleaned_paragraphs)
+
+        content = content.replace("[", "")
+        content = content.replace("]", "")
+        content = content.replace("_", "")
 
         # Save TXT summary
         target_path = self.save_dir / "english.txt"

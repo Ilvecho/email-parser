@@ -23,7 +23,9 @@ if __name__ == "__main__":
 
     with open(save_path / "english.txt", 'r', encoding='utf-8') as f:
         content = f.read()
+
+    print(len(content.strip()))
     
-    text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
-    text_to_speech.transform_content(content)
+    # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
+    # text_to_speech.transform_content(content)
 
