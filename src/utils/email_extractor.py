@@ -79,8 +79,8 @@ class YahooEmailExtractor:
         """
 
         # Select inbox
-        # self.imap.select("INBOX", readonly=True)
-        self.imap.select("INBOX")
+        self.imap.select("INBOX", readonly=True)
+        # self.imap.select("INBOX")
         
         # Search for all emails
         _, message_numbers = self.imap.search(None, "UNSEEN")
@@ -114,12 +114,12 @@ class YahooEmailExtractor:
                 # Extract content and create summary
                 parser.parse_email_body(message, from_address)
 
-                # Copy email to Archive folder
-                result = self.imap.copy(email_id, "Archive")  
+                # # Copy email to Archive folder
+                # result = self.imap.copy(email_id, "Archive")  
 
-                if result[0] == "OK":
-                    # Mark the email as deleted in the inbox
-                    self.imap.store(email_id, "+FLAGS", "\\Deleted")
+                # if result[0] == "OK":
+                #     # Mark the email as deleted in the inbox
+                #     self.imap.store(email_id, "+FLAGS", "\\Deleted")
                 
             except Exception as e:
                 print(f"Error processing email {email_id}: {str(e)}")

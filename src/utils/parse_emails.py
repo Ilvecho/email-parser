@@ -71,6 +71,34 @@ class ParseEmails:
         pattern = r'\*\*The details.*?Why'
         content = re.sub(pattern, 'Why', content, flags=re.DOTALL)
 
+        # Remove emojis
+        emoji_pattern = re.compile("["
+            u"\U0001F600-\U0001F64F"  # emoticons
+            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+            u"\U0001F680-\U0001F6FF"  # transport & map symbols
+            u"\U0001F700-\U0001F77F"  # alchemical symbols
+            u"\U0001F780-\U0001F7FF"  # Geometric Shapes
+            u"\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
+            u"\U0001F004-\U0001F0CF"  # Additional emoticons
+            u"\U0001F170-\U0001F251"  # Enclosed characters
+            u"\U00002702-\U000027B0"  # Dingbats
+            u"\U000024C2-\U0001F251"  # Enclosed characters
+            u"\U0001F300-\U0001F5FF"  # Misc Symbols & Pictographs
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols & Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols & Pictographs Extended-A
+            u"\U00002600-\U000026FF"  # Miscellaneous Symbols
+            u"\U00002700-\U000027BF"  # Dingbats
+            u"\U0000FE0F"             # Variation Selector
+            u"\U0001F1E0-\U0001F1FF"  # Flags (iOS)
+            "]+", flags=re.UNICODE)
+            
+        # Remove emojis
+        content = emoji_pattern.sub('', content)
+
         # Remove the sponsored parts
         pattern = r'###### TOGETHER WITH.*?----------'
         content = re.sub(pattern, '', content, flags=re.DOTALL)
@@ -88,6 +116,10 @@ class ParseEmails:
         pattern = r'### 💼 _\*\*\[AI Job Opportunities\]\*\*_.*?----------'
         content = re.sub(pattern, '', content, flags=re.DOTALL)        
 
+        # Format the titles
+        pattern = r'#+'
+        content = re.sub(pattern, '#', content, flags=re.DOTALL)    
+
         # Remove some empty substrings
         content = content.replace("----------", "") 
         content = content.replace("**QUICK HITS**", "")
@@ -103,7 +135,7 @@ class ParseEmails:
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
-            f.write(f'\n\n\n#\n\nThe Rundown AI\n\n{content.strip()}')
+            f.write(f'\n\n\n#+#\n\nThe Rundown AI\n\n{content.strip()}')
 
         return True
     
@@ -118,46 +150,37 @@ class ParseEmails:
             u"\U0001F600-\U0001F64F"  # emoticons
             u"\U0001F300-\U0001F5FF"  # symbols & pictographs
             u"\U0001F680-\U0001F6FF"  # transport & map symbols
-            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-            u"\U00002702-\U000027B0"  # dingbats
-            u"\U000024C2-\U0001F251"  # misc symbols
-            u"\U0000FE0F"  # variation selector
-            u"\U0000231A-\U0000231B"  # watch symbols
-            u"\U000023E9-\U000023EC"  # play/pause symbols
-            u"\U000023F0-\U000023F3"  # clock symbols
-            u"\U000023F8-\U000023FA"  # media symbols
-            u"\U00002300-\U000023FF"  # technical symbols
-            u"\U00002600-\U000027BF"  # misc symbols and arrows
-            u"\U00002934-\U00002935"  # arrow symbols
-            u"\U00002B05-\U00002B07"  # arrow symbols
-            u"\U00002B1B-\U00002B1C"  # square symbols
-            u"\U00002B50-\U00002B55"  # star symbols
+            u"\U0001F700-\U0001F77F"  # alchemical symbols
+            u"\U0001F780-\U0001F7FF"  # Geometric Shapes
+            u"\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
+            u"\U0001F004-\U0001F0CF"  # Additional emoticons
+            u"\U0001F170-\U0001F251"  # Enclosed characters
+            u"\U00002702-\U000027B0"  # Dingbats
+            u"\U000024C2-\U0001F251"  # Enclosed characters
+            u"\U0001F300-\U0001F5FF"  # Misc Symbols & Pictographs
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols & Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols & Pictographs Extended-A
+            u"\U00002600-\U000026FF"  # Miscellaneous Symbols
+            u"\U00002700-\U000027BF"  # Dingbats
+            u"\U0000FE0F"             # Variation Selector
+            u"\U0001F1E0-\U0001F1FF"  # Flags (iOS)
             "]+", flags=re.UNICODE)
         
         # Remove emojis
         content = emoji_pattern.sub('', content)
 
-        # Remove empty lines while keeping paragraph separation
-        paragraphs = content.split('\n')
-        cleaned_paragraphs = []
-
-        for paragraph in paragraphs:
-            # Remove newline characters within paragraphs
-            cleaned_paragraph = ' '.join(paragraph.split())
-            cleaned_paragraphs.append(cleaned_paragraph)
-
-        cleaned_paragraphs = [paragraph.strip() if len(paragraph) != 0 else "\n"  for paragraph in cleaned_paragraphs]
-        # Join the cleaned paragraphs with double newlines to keep separation
-        content = ' '.join(cleaned_paragraphs)
-
         # Remove the parentheses with the reading time
-        content = re.sub(r'\(\d+\s?MINUTE\s?READ\)', '', content)
+        content = re.sub(r'\(\d+\s*?MINUTE\s*?READ\)', '', content)
 
         # Remove the links numbers
         content = re.sub(r'\[\d+\]', '', content)
 
-        # Remove some remaining double spaces
-        content = re.sub(r'\r\n', '', content)
+        # # Remove one space lines
+        # content = re.sub(r'\n ', ' ', content)
 
         # Keep only the titles
         # Step 1: Split at the substring while preserving it in one part
@@ -170,6 +193,17 @@ class ParseEmails:
         first_part = content[:split_index + len(split_text)]
         first_part = first_part.replace(split_text, "OTHER NEWS")
         second_part = content[split_index + len(split_text):]
+
+        # ####################################
+        # ############ TEMP ##################
+        # ####################################
+
+        # # Save TXT summary
+        # target_path = self.save_dir / "english.txt"
+        # with open(target_path, 'a', encoding='utf-8') as f:
+        #     f.write(f"\n\n\n#+#\n\nToo Long; Don't Read\n\n{content.strip()}")
+
+        # return True
         
         # Step 2: Process the second part line by line
         lines = second_part.strip().split('\n')
@@ -189,19 +223,44 @@ class ParseEmails:
         for line in all_caps_lines:
 
             if len(filtered_lines) == 0: 
-                filtered_lines.append('\n' + line + '\n')
+                filtered_lines.append('\n- ' + line + '\n')
             elif not any(substring in line for substring in forbidden_substrings):
-                filtered_lines.append(line + '\n')
+                filtered_lines.append('- ' + line + '\n')
         
         filtered_second_part = '\n'.join(filtered_lines)
         content = '\n'.join([first_part, filtered_second_part])
 
         content = content.replace("\n ", "\n")
 
+        # Remove empty lines while keeping paragraph separation
+        paragraphs = content.split('\n')
+        cleaned_paragraphs = []
+
+        for paragraph in paragraphs:
+            # Remove newline characters within paragraphs
+            cleaned_paragraph = ' '.join(paragraph.split())
+            cleaned_paragraphs.append(cleaned_paragraph)
+
+        cleaned_paragraphs = [paragraph.strip() if len(paragraph) != 0 else "\n"  for paragraph in cleaned_paragraphs]
+        # Join the cleaned paragraphs with double newlines to keep separation
+        content = '\n'.join(cleaned_paragraphs)
+
+        # 1. Remove single newlines between words with lowercase letters
+        content = re.sub(r'(?<=[a-z\.])\n(?=[A-Za-z])', ' ', content)
+
+        # 2. Remove double newlines between all-caps words
+        content = re.sub(r'(?<=[A-Z])[\n]+(?=[A-Z])', '\n', content)
+
+        # Remove multiple newlines between bullet points in OTHER NEWS section
+        content = re.sub(r'(-[^\n]+)\n\n+(?=-)', r'\1\n', content)
+
+        # Final clean up
+        content = re.sub(r'\n\n+', '\n\n', content)
+
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
-            f.write(f"\n\n\n#\n\nToo Long; Don't Read\n\n{content.strip()}")
+            f.write(f"\n\n\n#+#\n\nToo Long; Don't Read\n\n{content.strip()}")
 
         return True
 
@@ -277,26 +336,30 @@ class ParseEmails:
         second_part, third_part = second_part.split('Markets & Economy')
 
         lines = second_part.split("\n")
-        emoji_pattern = re.compile(
-            "["
-            "\U0001F600-\U0001F64F"  # emoticons
-            "\U0001F300-\U0001F5FF"  # symbols & pictographs
-            "\U0001F680-\U0001F6FF"  # transport & map symbols
-            "\U0001F700-\U0001F77F"  # alchemical symbols
-            "\U0001F780-\U0001F7FF"  # Geometric Shapes
-            "\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
-            "\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
-            "\U0001FA00-\U0001FA6F"  # Chess Symbols
-            "\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
-            "\U00002702-\U000027B0"  # Dingbats
-            "\U000024C2-\U0000257F"  # Enclosed characters
-            "\U00002600-\U000026FF"  # Miscellaneous Symbols
-            "\U00002700-\U000027BF"  # Dingbats
-            "\U0000FE0F"             # Variation Selector
-            "\U0001F1E0-\U0001F1FF"  # Flags (iOS)
-            "]+", 
-            flags=re.UNICODE
-        )
+        
+        emoji_pattern = re.compile("["
+            u"\U0001F600-\U0001F64F"  # emoticons
+            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+            u"\U0001F680-\U0001F6FF"  # transport & map symbols
+            u"\U0001F700-\U0001F77F"  # alchemical symbols
+            u"\U0001F780-\U0001F7FF"  # Geometric Shapes
+            u"\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
+            u"\U0001F004-\U0001F0CF"  # Additional emoticons
+            u"\U0001F170-\U0001F251"  # Enclosed characters
+            u"\U00002702-\U000027B0"  # Dingbats
+            u"\U000024C2-\U0001F251"  # Enclosed characters
+            u"\U0001F300-\U0001F5FF"  # Misc Symbols & Pictographs
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols & Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols & Pictographs Extended-A
+            u"\U00002600-\U000026FF"  # Miscellaneous Symbols
+            u"\U00002700-\U000027BF"  # Dingbats
+            u"\U0000FE0F"             # Variation Selector
+            u"\U0001F1E0-\U0001F1FF"  # Flags (iOS)
+            "]+", flags=re.UNICODE)
         
         # Filter lines that start with an emoji
         emoji_lines = []
@@ -340,12 +403,15 @@ class ParseEmails:
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
-            f.write(f'\n\n\n#\n\nThe Average Joe\n\n{content.strip()}')
+            f.write(f'\n\n\n#+#\n\nThe Average Joe\n\n{content.strip()}')
 
         return True
 
     # The Neuron
     def neuron(self, content):
+
+        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?#'
+        content = re.sub(pattern, '#', content, flags=re.DOTALL)
 
         content = content.split("Welcome, humans. ")[-1].strip()
         content = content.split("# A Cat's Commentary.")[0].strip()
@@ -359,8 +425,8 @@ class ParseEmails:
         # content = re.sub(pattern, '', content)
         pattern = r'\(www.*?/\)'
         content = re.sub(pattern, '', content)
-        # pattern = r'(.*?/)'
-        # content = re.sub(pattern, '', content)
+        pattern = r'\*\*'
+        content = re.sub(pattern, '', content)
 
         # Remove the images
         pattern = r'View image:.*?Caption:'
@@ -410,7 +476,7 @@ class ParseEmails:
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
-            f.write(f'\n\n\n#\n\nThe Neuron\n\n{content.strip()}')
+            f.write(f'\n\n\n#+#\n\nThe Neuron\n\n{content.strip()}')
 
         return True
     
@@ -450,7 +516,7 @@ class ParseEmails:
         # Save TXT summary
         target_path = self.save_dir / "italiano.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
-            f.write(f'\n\n\n#\n\nAnalitica\n\n{content.strip()}')
+            f.write(f'\n\n\n#+#\n\nAnalitica\n\n{content.strip()}')
 
         return True
 
@@ -471,20 +537,24 @@ class ParseEmails:
             u"\U0001F600-\U0001F64F"  # emoticons
             u"\U0001F300-\U0001F5FF"  # symbols & pictographs
             u"\U0001F680-\U0001F6FF"  # transport & map symbols
-            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-            u"\U00002702-\U000027B0"  # dingbats
-            u"\U000024C2-\U0001F251"  # misc symbols
-            u"\U0000FE0F"  # variation selector
-            u"\U0000231A-\U0000231B"  # watch symbols
-            u"\U000023E9-\U000023EC"  # play/pause symbols
-            u"\U000023F0-\U000023F3"  # clock symbols
-            u"\U000023F8-\U000023FA"  # media symbols
-            u"\U00002300-\U000023FF"  # technical symbols
-            u"\U00002600-\U000027BF"  # misc symbols and arrows
-            u"\U00002934-\U00002935"  # arrow symbols
-            u"\U00002B05-\U00002B07"  # arrow symbols
-            u"\U00002B1B-\U00002B1C"  # square symbols
-            u"\U00002B50-\U00002B55"  # star symbols
+            u"\U0001F700-\U0001F77F"  # alchemical symbols
+            u"\U0001F780-\U0001F7FF"  # Geometric Shapes
+            u"\U0001F800-\U0001F8FF"  # Supplemental Arrows-C
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
+            u"\U0001F004-\U0001F0CF"  # Additional emoticons
+            u"\U0001F170-\U0001F251"  # Enclosed characters
+            u"\U00002702-\U000027B0"  # Dingbats
+            u"\U000024C2-\U0001F251"  # Enclosed characters
+            u"\U0001F300-\U0001F5FF"  # Misc Symbols & Pictographs
+            u"\U0001F900-\U0001F9FF"  # Supplemental Symbols & Pictographs
+            u"\U0001FA00-\U0001FA6F"  # Chess Symbols
+            u"\U0001FA70-\U0001FAFF"  # Symbols & Pictographs Extended-A
+            u"\U00002600-\U000026FF"  # Miscellaneous Symbols
+            u"\U00002700-\U000027BF"  # Dingbats
+            u"\U0000FE0F"             # Variation Selector
+            u"\U0001F1E0-\U0001F1FF"  # Flags (iOS)
             "]+", flags=re.UNICODE)
         
         # Remove emojis
@@ -514,7 +584,7 @@ class ParseEmails:
         # Save TXT summary
         target_path = self.save_dir / "italiano.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
-            f.write(f'\n\n\n#\n\nDatapizza\n\n{content.strip()}')
+            f.write(f'\n\n\n#+#\n\nDatapizza\n\n{content.strip()}')
 
         return True
 

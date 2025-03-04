@@ -11,7 +11,7 @@ if __name__ == "__main__":
     UNREAL_SPEECH_API = os.getenv("UNREAL_SPEECH_API")
 
     today = datetime.now().strftime('%Y-%m-%d')  
-    save_path = Path(__file__).parent / f"email_content_{str(today)}"
+    save_path = Path(__file__).parent.parent / f"email_content_{str(today)}"
     
     extractor = YahooEmailExtractor(EMAIL, APP_PASSWORD)
     
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     with open(save_path / "english.txt", 'r', encoding='utf-8') as f:
         content = f.read()
 
-    print(len(content.strip()))
+    # print(len(content.strip()))
     
     # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
     # text_to_speech.transform_content(content)
