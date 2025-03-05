@@ -132,6 +132,19 @@ class ParseEmails:
         content = content.replace("_", "")
         content = content.replace("**", "")
 
+        # Improve readability of last part
+        first_part, second_part = content.split("#  Everything else in AI today")
+
+        improved_second_part = []
+        for line in second_part.split('\n'):
+            if not line.strip():
+                continue
+            else:
+                improved_second_part.append('- ' + line)
+
+        second_part = '\n'.join(improved_second_part)
+        content = '\n\n'.join([first_part,"#  Everything else in AI today",  second_part])
+
         # Save TXT summary
         target_path = self.save_dir / "english.txt"
         with open(target_path, 'a', encoding='utf-8') as f:
@@ -144,6 +157,9 @@ class ParseEmails:
 
         # Isolate only the part that is relevant
         content = content.split("BIG TECH & STARTUPS")[-1].split("Love TLDR?")[0]
+
+        # Join split all-caps lines
+        content = re.sub(r'([A-Z0-9][A-Z0-9\s,\'&-]+)\n+?([A-Z0-9][A-Z0-9\s,\'&-]+)', r'\1 \2', content)
 
         # Remove emojis
         emoji_pattern = re.compile("["
@@ -299,7 +315,7 @@ class ParseEmails:
         content = re.sub(pattern, 'Markets & Economy\n', content, flags=re.DOTALL)
 
         pattern = r"PARTNERED WITH.*?CHART"
-        content = re.sub(pattern, '', content, flags=re.DOTALL)
+        content = re.sub(pattern, 'CHART', content, flags=re.DOTALL)
 
         pattern = r"PARTNERED.*?SUNDAY"
         content = re.sub(pattern, '', content, flags=re.DOTALL)
@@ -327,7 +343,7 @@ class ParseEmails:
             if not line.strip():
                 continue
             else: 
-                lines_of_interest.append(line)
+                lines_of_interest.append('- ' + line)
                 cont += 1
 
         first_part = "\n\n".join(lines_of_interest)
@@ -371,10 +387,12 @@ class ParseEmails:
             # Check if the line starts with an emoji
             if emoji_pattern.match(line.strip()):
                 temp = emoji_pattern.sub('', line)
-                emoji_lines.append(temp.strip())
+                emoji_lines.append("- " + temp.strip())
         
         # Join the filtered lines and return
         second_part = '\n\n'.join(emoji_lines)    
+
+        content = '\n\n'.join([first_part, second_part, third_part])
 
         # Third part: Keep only the title, except when mentioning EU or Europe
         third_part, fourth_part = third_part.split("CHART")
@@ -389,14 +407,14 @@ class ParseEmails:
             title, _ = line.split(':')
 
             if "EU" in title or "europe" in title.lower():
-                lines_of_interest.append(line.strip())
+                lines_of_interest.append('- ' + line.strip())
             else: 
-                lines_of_interest.append(title.strip())
+                lines_of_interest.append('- ' + title.strip())
 
         third_part = '\n\n'.join(lines_of_interest)
 
         # Fourth part: keep only the title
-        fourth_part = fourth_part.split('\n')[0].strip()
+        fourth_part = '- ' + fourth_part.split('\n')[0].strip()
 
         content = '\n\n'.join([first_part, second_part, third_part, fourth_part])
 
@@ -410,6 +428,7 @@ class ParseEmails:
     # The Neuron
     def neuron(self, content):
 
+        # Remove the partnerships
         pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?#'
         content = re.sub(pattern, '#', content, flags=re.DOTALL)
 
@@ -433,12 +452,8 @@ class ParseEmails:
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
         # Remove the agenda
-        pattern = r'\*\*Here’s what you need to know about AI today.*?#'
+        pattern = r'Here’s what you need to know about AI today.*?#'
         content = re.sub(pattern, '\r\n   \r\n#', content, flags=re.DOTALL)
-
-        # Remove the partnerships
-        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?#'
-        content = re.sub(pattern, '#', content, flags=re.DOTALL)
 
         # Remove Treats to try
         pattern = r'# Treats To Try\..*# Around the Horn'
@@ -455,6 +470,8 @@ class ParseEmails:
             content = content.split("# Thursday")[0].strip()
         elif '# Friday' in content:
             content = content.split("# Friday")[0].strip()
+        elif '# Where do you #Neuron' in content:
+            content = content.split("# Where do you #Neuron")[0].strip()
 
         # Remove empty lines while keeping paragraph separation
         paragraphs = content.split('\r\n')

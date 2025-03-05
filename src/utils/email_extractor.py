@@ -8,7 +8,7 @@ TARGET_ADDRESS_ENG = [
     "joe@readthejoe.com",                           # The Average Joe - Business and Finance(ENG)
     "news@daily.therundown.ai",                     # The rundown - AI (ENG)
     "dan@tldrnewsletter.com",                       # TL;DR - AI and tech (ENG)
-    "chamath@substack.com",                         # Chamath Palihapitiya - Business, Tech, AI (ENG)
+    # "chamath@substack.com",                         # Chamath Palihapitiya - Business, Tech, AI (ENG)
 ]
 
 TARGET_ADDRESS_ITA = [
@@ -122,7 +122,7 @@ class YahooEmailExtractor:
                 #     self.imap.store(email_id, "+FLAGS", "\\Deleted")
                 
             except Exception as e:
-                print(f"Error processing email {email_id}: {str(e)}")
+                print(f"Error processing email {from_address}: {str(e)}")
                 continue
 
 
