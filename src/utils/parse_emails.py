@@ -28,7 +28,7 @@ class ParseEmails:
                 continue
         
         # Use a switch to invoke the different parsers for each email 
-        if from_address == "news@daily.therundown.ai":
+        if from_address == "news@daily.therundown.ai" or from_address == "therundownai@mail.beehiiv.com":
             ok = self.rundown_ai(content)
 
         elif from_address == "dan@tldrnewsletter.com":
@@ -110,10 +110,10 @@ class ParseEmails:
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
         # Remove Trending tools & Jobs
-        pattern = r'### 🛠️ _\*\*\[Trending AI Tools\]\*\*_.*?----------'
+        pattern = r'###\s+_\*\*\[Trending AI Tools\]\*\*_.*?----------'
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-        pattern = r'### 💼 _\*\*\[AI Job Opportunities\]\*\*_.*?----------'
+        pattern = r'###\s+_\*\*\[AI Job Opportunities\]\*\*_.*?----------'
         content = re.sub(pattern, '', content, flags=re.DOTALL)        
 
         # Format the titles
@@ -124,9 +124,7 @@ class ParseEmails:
         content = content.replace("----------", "") 
         content = content.replace("**QUICK HITS**", "")
         content = content.replace("\r\n\r\n", "\n")
-        content = content.replace("\n\n", "\n")
-        content = content.replace("\n ", "\n")
-        content = content.replace("\r ", "\n")
+        content = re.sub(r'\n\s*[\n\s*]+', '\n\n', content)
         content = content.replace("[", "")
         content = content.replace("]", "")
         content = content.replace("_", "")

@@ -7,6 +7,7 @@ TARGET_ADDRESS_ENG = [
     "theneuron@newsletter.theneurondaily.com",      # The Neuron - AI (ENG)
     "joe@readthejoe.com",                           # The Average Joe - Business and Finance(ENG)
     "news@daily.therundown.ai",                     # The rundown - AI (ENG)
+    "therundownai@mail.beehiiv.com",                # The rundown - AI (ENG)
     "dan@tldrnewsletter.com",                       # TL;DR - AI and tech (ENG)
     # "chamath@substack.com",                         # Chamath Palihapitiya - Business, Tech, AI (ENG)
 ]

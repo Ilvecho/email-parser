@@ -21,10 +21,16 @@ if __name__ == "__main__":
         extractor.disconnect()
         print("Email content extraction completed!")
 
+        # Add the closing
+        target_path = save_path / "english.txt"
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(f'\n\n\n*Thank you for listening, until next time!*')
+
+    # Create the Audio file
     with open(save_path / "english.txt", 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # print(len(content.strip()))
+    print(len(content.strip()))
     
     # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
     # text_to_speech.transform_content(content)
