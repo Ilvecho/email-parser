@@ -68,8 +68,8 @@ class ParseEmails:
         content = re.sub(pattern, '\n \n', content, flags=re.DOTALL)
 
         # Remove details
-        pattern = r'\*\*The details.*?Why'
-        content = re.sub(pattern, 'Why', content, flags=re.DOTALL)
+        # pattern = r'\*\*The details.*?Why'
+        # content = re.sub(pattern, 'Why', content, flags=re.DOTALL)
 
         # Remove emojis
         emoji_pattern = re.compile("["
@@ -207,40 +207,39 @@ class ParseEmails:
         first_part = content[:split_index + len(split_text)]
         first_part = first_part.replace(split_text, "OTHER NEWS")
         second_part = content[split_index + len(split_text):]
-
-        # ####################################
-        # ############ TEMP ##################
-        # ####################################
-
-        # # Save TXT summary
-        # target_path = self.save_dir / "english.txt"
-        # with open(target_path, 'a', encoding='utf-8') as f:
-        #     f.write(f"\n\n\n#+#\n\nToo Long; Don't Read\n\n{content.strip()}")
-
-        # return True
         
         # Step 2: Process the second part line by line
         lines = second_part.strip().split('\n')
         
-        # Filter to keep only all-caps lines
-        all_caps_lines = []
-
-        for line in lines:
-            # Check if line is non-empty and all uppercase
-            if line.strip() and line.strip() == line.strip().upper():
-                all_caps_lines.append(line)
-        
-        # Step 3: Remove lines with specified substrings
-        forbidden_substrings = ["(SPONSOR)", "(GITHUB REPO)", "(WEBSITE)", "PROGRAMMING, DESIGN & DATA SCIENCE", "MISCELLANEOUS", "QUICK LINKS", "HIRING"]
+        # New filtering logic:
+        # forbidden_substrings = ["(SPONSOR)", "(GITHUB REPO)", "(WEBSITE)", "PROGRAMMING, DESIGN & DATA SCIENCE", "MISCELLANEOUS", "QUICK LINKS", "HIRING"]
+        forbidden_substrings = ["(SPONSOR)", "(GITHUB REPO)", "(WEBSITE)", "HIRING"]
         filtered_lines = []
-        
-        for line in all_caps_lines:
+        skip_mode = False
 
-            if len(filtered_lines) == 0: 
-                filtered_lines.append('\n- ' + line + '\n')
-            elif not any(substring in line for substring in forbidden_substrings):
-                filtered_lines.append('- ' + line + '\n')
-        
+        for idx, line in enumerate(lines):
+            stripped_line = line.strip()
+            is_all_caps = stripped_line and stripped_line == stripped_line.upper()
+
+            if skip_mode:
+                if is_all_caps:
+                    skip_mode = False
+                    # Start a new block with this ALL CAPS line
+                    filtered_lines.append('\n- ' + line + '\n' if len(filtered_lines) == 0 else '- ' + line + '\n')
+                # Otherwise, keep skipping
+                continue
+
+            if is_all_caps and any(substring in line for substring in forbidden_substrings):
+                skip_mode = True
+                # Do not add this line, start skipping
+                continue
+
+            # Add line (ALL CAPS or not) if not skipping
+            if is_all_caps:
+                filtered_lines.append('\n- ' + line + '\n' if len(filtered_lines) == 0 else '- ' + line + '\n')
+            else:
+                filtered_lines.append(line + '\n')
+
         filtered_second_part = '\n'.join(filtered_lines)
         content = '\n'.join([first_part, filtered_second_part])
 
@@ -427,8 +426,8 @@ class ParseEmails:
     def neuron(self, content):
 
         # Remove the partnerships
-        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?#'
-        content = re.sub(pattern, '#', content, flags=re.DOTALL)
+        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?# Prompt Tip of the Day'
+        content = re.sub(pattern, '# Prompt Tip of the Day', content, flags=re.DOTALL)
 
         content = content.split("Welcome, humans. ")[-1].strip()
         content = content.split("# A Cat's Commentary.")[0].strip()

@@ -18,6 +18,13 @@ TARGET_ADDRESS_ITA = [
     "community@datapizza.it"                        # Datapizza - AI e Data Science (ITA)
 ]
 
+AI_ADDRESS = [
+    "theneuron@newsletter.theneurondaily.com",      # The Neuron - AI (ENG)
+    "news@daily.therundown.ai",                     # The rundown - AI (ENG)
+    "therundownai@mail.beehiiv.com",                # The rundown - AI (ENG)
+    "dan@tldrnewsletter.com",                       # TL;DR - AI and tech (ENG)
+]
+
 class YahooEmailExtractor:
 
     def __init__(self, email_address, app_password):
@@ -36,6 +43,7 @@ class YahooEmailExtractor:
     def connect(self):
         """Establish connection to Yahoo's IMAP server"""
         self.imap = imaplib.IMAP4_SSL(self.imap_server)
+        print("Trying to connect to Yahoo IMAP server...")
         try:
             self.imap.login(self.email_address, self.password)
             return True
@@ -83,14 +91,16 @@ class YahooEmailExtractor:
         self.imap.select("INBOX", readonly=True)
         # self.imap.select("INBOX")
         
-        # Search for all emails
-        _, message_numbers = self.imap.search(None, "UNSEEN")
-        
-        # Get the list of email IDs
-        email_ids = message_numbers[0].split()
-        
+        # Search for unseen emails from target addresses
+        target_addresses = AI_ADDRESS
+        email_ids = []
+        for address in target_addresses:
+            _, msg_nums = self.imap.search(None, f'(UNSEEN FROM "{address}")')
+            if msg_nums and msg_nums[0]:
+                email_ids.extend(msg_nums[0].split())
+
         if not email_ids:
-            print("No unread emails found")
+            print("No unread emails from target addresses found")
             return []
         
         # Process the most recent emails first
