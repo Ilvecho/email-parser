@@ -425,8 +425,10 @@ class ParseEmails:
     # The Neuron
     def neuron(self, content):
 
+
+
         # Remove the partnerships
-        pattern = r'###### \*\*FROM OUR PARTNERS\*\*.*?#.*?# Prompt Tip of the Day'
+        pattern = r'\*\*FROM OUR PARTNERS\*\*.*?# Prompt Tip of the Day'
         content = re.sub(pattern, '# Prompt Tip of the Day', content, flags=re.DOTALL)
 
         content = content.split("Welcome, humans. ")[-1].strip()

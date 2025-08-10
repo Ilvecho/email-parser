@@ -1,5 +1,8 @@
 import imaplib
 import email
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from utils import ParseEmails                       # My utils
 
 
@@ -25,11 +28,13 @@ AI_ADDRESS = [
     "dan@tldrnewsletter.com",                       # TL;DR - AI and tech (ENG)
 ]
 
-class YahooEmailExtractor:
+class YahooEmailManager:
 
     def __init__(self, email_address, app_password):
         """
-        Initialize the Yahoo email extractor.
+        Initialize the Yahoo email manager.
+        This is able to connecto to Yahoo's IMAP server and extract emails.
+        It can also connect to the SMTP server to send emails.
         
         Args:
             email_address: Your Yahoo email address
@@ -38,6 +43,8 @@ class YahooEmailExtractor:
         self.email_address = email_address
         self.password = app_password
         self.imap_server = "imap.mail.yahoo.com"
+        self.smtp_server = "smtp.mail.yahoo.com"
+        self.smtp_port = 465
     
     # Connect and disconnect from the email server     
     def connect(self):
@@ -88,8 +95,8 @@ class YahooEmailExtractor:
         """
 
         # Select inbox
-        self.imap.select("INBOX", readonly=True)
-        # self.imap.select("INBOX")
+        # self.imap.select("INBOX", readonly=True)
+        self.imap.select("INBOX")
         
         # Search for unseen emails from target addresses
         target_addresses = AI_ADDRESS
@@ -139,3 +146,40 @@ class YahooEmailExtractor:
 
         # Permanently remove the deleted emails
         self.imap.expunge()
+
+    def send_yahoo_email(self, recipient, subject, html_body):
+
+        """
+        Send an email via Yahoo SMTP server.
+
+        Args:
+            sender: Email address of the sender
+            app_password: App password for Yahoo account
+            recipient: Email address of the recipient
+            subject: Subject of the email
+            html_body: HTML content of the email
+        """
+        # Yahoo SMTP server details
+        smtp_server = "smtp.mail.yahoo.com"
+        smtp_port = 465
+
+        # Create the email
+        msg = MIMEMultipart()
+        msg["From"] = self.email_address
+        msg["To"] = recipient
+        msg["Subject"] = subject
+        msg.attach(MIMEText(html_body, "html"))
+
+        # Send the email
+        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+            server.login(self.email_address, self.password)
+            server.sendmail(self.email_address, recipient, msg.as_string())
+
+        return True
+
+
+
+
+
+
+
