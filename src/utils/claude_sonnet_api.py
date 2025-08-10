@@ -94,7 +94,7 @@ class ClaudeSonnetAPI:
         self.headers = {
             "x-api-key": self.api_key,
             "Content-Type": "application/json",
-            "anthropic-version": "2023-06-01"
+            "anthropic-version": "2024-10-22"
         }
 
     def process_content(self, content: str):
