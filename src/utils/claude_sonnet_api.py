@@ -94,7 +94,7 @@ class ClaudeSonnetAPI:
         self.headers = {
             "x-api-key": self.api_key,
             "Content-Type": "application/json",
-            "anthropic-version": "2024-10-22"
+            "anthropic-version": "2023-06-01"
         }
 
     def process_content(self, content: str):
@@ -107,6 +107,7 @@ class ClaudeSonnetAPI:
             ]
         }
         response = requests.post(self.api_url, headers=self.headers, json=payload)
+        # print(response.text)
         response.raise_for_status()
 
         if response.status_code != 200:

@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     content += signature
 
-    success = manager.send_yahoo_email(recipient="massimoterzi@hotmail.it", subject="Daily AI News", html_body=content)
+    success = manager.send_yahoo_email(recipient="massimo.terzi@swift.com", subject="Daily AI News", html_body=content)
 
     if not success:
         print("Failed to send email.")
