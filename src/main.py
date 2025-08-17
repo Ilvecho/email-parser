@@ -40,7 +40,7 @@ def create_signature(save_path):
 if __name__ == "__main__":
 
     # Saturday cleanup
-    if datetime.now().weekday() == 5:  
+    if datetime.now().weekday() == 6:  
         print("It's Saturday, time for a clean up!")
 
         # get the directory
