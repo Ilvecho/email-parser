@@ -40,7 +40,7 @@ def create_signature(save_path):
 if __name__ == "__main__":
 
     # Saturday cleanup
-    if datetime.now().weekday() == 6:  
+    if datetime.now().weekday() == 5:  
         print("It's Saturday, time for a clean up!")
 
         # get the directory
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         exit(1)
 
     # Sunday do nothing
-    elif datetime.now().weekday() == 5: 
+    elif datetime.now().weekday() == 6: 
         print("It's Sunday, well deserved break!")
         exit(1)
     # If it's a weekday, execute the code
