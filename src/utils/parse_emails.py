@@ -6,6 +6,7 @@ class ParseEmails:
         self.save_dir = save_dir
 
     def parse_email_body(self, message, from_address):
+        html_text = ""
 
         # The emails are made of multiple parts, one of which is TXT and it's the one we are interested in
         for part in message.walk():
@@ -17,11 +18,13 @@ class ParseEmails:
                 # Use the plain text version of the email
                 if content_type == "text/plain":
                     # Get text
-                    charset = part.get_content_charset()  # Get the correct encoding
-                    if charset is None:
-                        charset = "utf-8"  # Default to UTF-8 if unknown
-                    
+                    charset = part.get_content_charset() or "utf-8" # Get the correct encoding                    
                     content = part.get_payload(decode=True).decode(charset, errors="replace")
+
+                elif content_type == "text/html":
+                    charset = part.get_content_charset() or "utf-8"
+                    html_text += part.get_payload(decode=True).decode(charset, errors="replace")
+
 
             except Exception as e:
                 print(f"Error processing part {content_type}: {str(e)}")
@@ -31,15 +34,54 @@ class ParseEmails:
         if from_address == "news@daily.therundown.ai" or from_address == "therundownai@mail.beehiiv.com":
             ok = self.rundown_ai(content)
 
+            # Find and save the Read Online link
+            match = re.search(r'<a[^>]+href="([^"]+)"[^>]*>\s*(?:<span[^>]*>)?Read Online(?:</span>)?\s*</a>', html_text, re.IGNORECASE)
+            if match:
+                # Save TXT summary
+                target_path = self.save_dir / "read_online_urls.txt"
+                with open(target_path, 'a', encoding='utf-8') as f:
+                    f.write(f"The Rundown AI={match.group(1).strip()}\n")
+
+                print("The Rundown AI link has been saved.")
+
+            else:
+                print("The Rundown AI link not found.")
+
         elif from_address == "dan@tldrnewsletter.com":
             ok = self.tldr(content)
+
+            # Find and save the View Online link
+            match = re.search(r'<a[^>]+href="([^"]+)"[^>]*>\s*(?:<span[^>]*>)?View Online(?:</span>)?\s*</a>', html_text, re.IGNORECASE)
+            if match:
+                # Save TXT summary
+                target_path = self.save_dir / "read_online_urls.txt"
+                with open(target_path, 'a', encoding='utf-8') as f:
+                    f.write(f"TL;DR={match.group(1).strip()}\n")
+
+                print("TL;DR link has been saved.")
+
+            else:
+                print("TL;DR link not found.")
 
         elif from_address == "joe@readthejoe.com":
             ok = self.average_joe(content)
 
         elif from_address == "theneuron@newsletter.theneurondaily.com":
             ok = self.neuron(content)
-        
+
+            # Find and save the Read Online link
+            match = re.search(r'<a[^>]+href="([^"]+)"[^>]*>\s*(?:<span[^>]*>)?Read Online(?:</span>)?\s*</a>', html_text, re.IGNORECASE)
+            if match:
+                # Save TXT summary
+                target_path = self.save_dir / "read_online_urls.txt"
+                with open(target_path, 'a', encoding='utf-8') as f:
+                    f.write(f"The Neuron={match.group(1).strip()}\n")
+
+                print("The Neuron link has been saved.")
+
+            else:
+                print("The Neuron link not found.")
+
         elif from_address == "news@myanalitica.it":
             ok = self.analitica(content)
 
@@ -203,7 +245,7 @@ class ParseEmails:
         
         if split_index == -1:
             return False
-        
+                
         first_part = content[:split_index + len(split_text)]
         first_part = first_part.replace(split_text, "OTHER NEWS")
         second_part = content[split_index + len(split_text):]
@@ -425,14 +467,18 @@ class ParseEmails:
     # The Neuron
     def neuron(self, content):
 
-
-
         # Remove the partnerships
         pattern = r'\*\*FROM OUR PARTNERS\*\*.*?# Prompt Tip of the Day'
         content = re.sub(pattern, '# Prompt Tip of the Day', content, flags=re.DOTALL)
 
+        # Remove the partnerships
+        pattern = r'\*\*FROM OUR PARTNERS\*\*.*?# Intelligent Insights'
+        content = re.sub(pattern, '# Intelligent Insights', content, flags=re.DOTALL)
+
         content = content.split("Welcome, humans. ")[-1].strip()
+        content = content.replace("’", "'")
         content = content.split("# A Cat's Commentary.")[0].strip()
+        
 
         # Remove the links
         pattern = r'\(http.*?\)'

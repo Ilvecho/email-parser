@@ -6,6 +6,37 @@ from dotenv import load_dotenv
 from utils import YahooEmailManager, TTS, ClaudeSonnetAPI                     # My utils
 
 
+def create_signature(save_path):
+    # Read newsletter links from file
+    links_path = save_path / "read_online_urls.txt"
+    newsletter_links = []
+    if links_path.exists():
+        with open(links_path, "r", encoding="utf-8") as f:
+            for idx, line in enumerate(f, 1):
+                if "=" in line:
+                    title, url = line.strip().split("=", 1)
+                    newsletter_links.append(f'<li>[{idx}] <a href="{url.strip()}">{title.strip()}</a></li>')
+    else:
+        # fallback to static list if file not found
+        newsletter_links = [
+                "<li>[1] The Neuron</li>",
+                "<li>[2] TL;DR</li>",
+                "<li>[3] The Rundown AI</li>"
+        ]
+
+    signature = f"""
+    <p><br />Until tomorrow,<br>
+    Massimo</p>
+
+    <strong>Credits</strong>
+    <p>The above content is derived from the following Newsletters:</p>
+    <ul>
+        {''.join(newsletter_links)}
+    </ul>
+    """
+
+    return signature
+
 if __name__ == "__main__":
 
     # Saturday cleanup
@@ -20,7 +51,7 @@ if __name__ == "__main__":
         
         # Nothing to clean up
         if len(folders) <= 1:
-            exit(0)  
+            exit(1)  
 
         # Sort by folder name 
         folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
@@ -29,12 +60,12 @@ if __name__ == "__main__":
             shutil.rmtree(folder)
             print(f"Removed old folder: {folder}")
 
-        exit(0)
+        exit(1)
 
     # Sunday do nothing
-    elif datetime.now().weekday() == 6: 
+    elif datetime.now().weekday() == 5: 
         print("It's Sunday, well deserved break!")
-        exit(0)
+        exit(1)
     # If it's a weekday, execute the code
     else:
         print("It's a weekday, let's get to work!")
@@ -45,6 +76,7 @@ if __name__ == "__main__":
     APP_PASSWORD = os.getenv("APP_PASSWORD")
     UNREAL_SPEECH_API = os.getenv("UNREAL_SPEECH_API")
     CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
+    RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
 
     today = datetime.now().strftime('%Y-%m-%d')  
     print(f"Today's date: {today}")
@@ -89,22 +121,10 @@ if __name__ == "__main__":
         content = f.read()
 
     # Add signature and credits
-    signature = """
-    <p><br />Until tomorrow,<br>
-    Massimo</p>
-
-    <strong>Credits</strong>
-    <p>The above content in derived from the following Newsletters:</p>
-    <ul>
-        <li>The Neuron</li>
-        <li>TL;DR</li>
-        <li>The Rundown AI</li>
-    </ul>
-    """
-
+    signature = create_signature(save_path)
     content += signature
 
-    success = manager.send_yahoo_email(recipient="massimo.terzi@swift.com", subject="Daily AI News", html_body=content)
+    success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
 
     if success:
         print("Email sent successfully.")
@@ -112,4 +132,3 @@ if __name__ == "__main__":
         print("Failed to send email.")
         # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
         # text_to_speech.transform_content(content)
-

@@ -19,6 +19,10 @@ You will receive content from multiple AI/tech newsletters. Each newsletter sect
 - Language: Plain, concise language without unnecessary adjectives/adverbs
 - Focus: Maximum information density in minimum time
 - Perspective: European AI enthusiast
+- Citations: Include source citations for each piece of news using the format [X] where:
+  - The Neuron = [1]
+  - The Rundown AI = [2]
+  - TL;DR = [3]
 </output_requirements>
 
 <prioritization>
@@ -55,6 +59,7 @@ LOW PRIORITY (minimal/skip):
 3. Always include "Prompt Tip of the Day" from "The Neuron" newsletter almost verbatim (remove only non-prompt-related content)
 4. Lead with most impactful developments in AI capabilities and industry changes
 5. Include specific metrics (performance gains, pricing, etc.) when relevant
+6. Add appropriate source citation [1], [2], or [3] at the end of each news item or paragraph
 </structure_requirements>
 
 <tone_style>
@@ -76,14 +81,12 @@ When covering new developments, consider:
 
 <format>
 Output must be valid HTML suitable for copying into an email. Organize into exactly three sections:
+1. Major News (no section title): Cover significant developments that warrant detailed coverage (more than a couple sentences). Each story should have a short, meaningful title using <h3> tags followed by content in <p> tags. Include source citation [X] at the very end of the last sentence without any line breaks (e.g., "the sentence ends now. [1]").
 
-1. Major News (no section title): Cover significant developments that warrant detailed coverage (more than a couple sentences). Each story should have a short, meaningful title using <h3> tags followed by content in <p> tags.
-
-2. Other News: Brief updates using <h2>Other News</h2> heading followed by <ul> and <li> tags for bullet points.
+2. Other News: Brief updates using <h2>Other News</h2> heading followed by <ul> and <li> tags for bullet points. Include source citation [X] at the very end of each bullet point without any line breaks (e.g., "the sentence ends now. [2]").
 
 3. Prompt Tip of the Day: Use <h2>Prompt Tip of the Day</h2> heading followed by content in <p> tags. Include "The Neuron" newsletter's prompt tip almost verbatim, removing only non-prompt-related content.
-
-Use proper HTML structure with <p> tags for paragraphs, <strong> tags for emphasis where needed, and ensure all tags are properly closed.
+Use proper HTML structure with <p> tags for paragraphs, <strong> tags for emphasis where needed, and ensure all tags are properly closed. Ensure every piece of information includes the appropriate source citation.
 </format>
 """
 
@@ -126,8 +129,3 @@ class ClaudeSonnetAPI:
 
         return response
 
-# Example usage:
-# api_key = os.getenv("CLAUDE_API_KEY")
-# claude_api = ClaudeSonnetAPI(api_key)
-# result = claude_api.process_content("Extracted email content goes here.")
-# print(result)

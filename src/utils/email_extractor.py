@@ -124,6 +124,13 @@ class YahooEmailManager:
                 
                 # Extract email addresses
                 from_address = self.extract_email_address(message['from'])
+
+                # Extract subject (title)
+                subject = message['subject'] if message['subject'] else ""
+
+                # Skip if subject contains "PODCAST"
+                if "PODCAST" in subject:
+                    continue
             
                 # If not in scope, skip
                 if not from_address in TARGET_ADDRESS_ENG and not from_address in TARGET_ADDRESS_ITA:
