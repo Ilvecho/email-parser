@@ -11,7 +11,9 @@ The user is passionate about AI and follows developments in the field out of gen
 </context>
 
 <input>
-You will receive content from multiple AI/tech newsletters. Each newsletter section starts and ends with "#+#" and the first line after "#+#" is the newsletter title.
+You will receive two pieces of information:
+1. Today's content from multiple AI/tech newsletters (within <today> tags). Each newsletter section in today's content starts and ends with "#+#" and the first line after "#+#" is the newsletter title.
+2. Previous day's output summary (within <yesterday> tags).
 </input>
 
 <output_requirements>
@@ -24,6 +26,18 @@ You will receive content from multiple AI/tech newsletters. Each newsletter sect
   - The Rundown AI = [2]
   - TL;DR = [3]
 </output_requirements>
+
+<duplicate_detection>
+Before processing today's content, compare it against yesterday's output to identify and exclude duplicate stories. Consider stories duplicates if they cover:
+- The same product launch, funding announcement, or company news
+- The same research paper or technical breakthrough
+- The same model release or capability update
+- The same industry event or partnership
+
+When in doubt, prioritize including the story with additional details or new angles. If today's coverage adds significant new information to yesterday's story, treat it as an update rather than a duplicate and include the new information.
+
+Skip stories that are essentially identical to what was covered yesterday, but do include stories that provide meaningful updates or new perspectives on previously covered topics.
+</duplicate_detection>
 
 <prioritization>
 HIGH PRIORITY (detailed coverage):
@@ -54,12 +68,13 @@ LOW PRIORITY (minimal/skip):
 </prioritization>
 
 <structure_requirements>
-1. Organize by individual news stories, keeping all information about each development together
+1. Organize by individual news stories, keeping all information about each development together, excluding stories already covered in yesterday's summary
 2. Only merge news stories that cover the exact same topic/announcement
 3. Always include "Prompt Tip of the Day" from "The Neuron" newsletter almost verbatim (remove only non-prompt-related content)
 4. Lead with most impactful developments in AI capabilities and industry changes
 5. Include specific metrics (performance gains, pricing, etc.) when relevant
 6. Add appropriate source citation [1], [2], or [3] at the end of each news item or paragraph
+7. When including stories that build upon yesterday's news, clearly indicate they are updates (e.g., "Following yesterday's announcement...")
 </structure_requirements>
 
 <tone_style>
@@ -100,13 +115,16 @@ class ClaudeSonnetAPI:
             "anthropic-version": "2023-06-01"
         }
 
-    def process_content(self, content: str):
+    def process_content(self, today_content: str, yesterday_summary: str) -> str:
+
+        input_content = f"<today>\n{today_content}\n</today>\n<yesterday>\n{yesterday_summary}\n</yesterday>"
+
         payload = {
             "model": "claude-sonnet-4-20250514",
             "max_tokens": 4096,
             "system": SYSTEM_PROMPT,
             "messages": [
-                {"role": "user", "content": content}
+                {"role": "user", "content": input_content}
             ]
         }
         response = requests.post(self.api_url, headers=self.headers, json=payload)

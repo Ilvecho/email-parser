@@ -1,6 +1,6 @@
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv 
 from utils import YahooEmailManager, TTS, ClaudeSonnetAPI                     # My utils
@@ -28,7 +28,7 @@ def create_signature(save_path):
     <p><br />Until tomorrow,<br>
     Massimo</p>
 
-    <strong>Credits</strong>
+    <p><strong>Credits:</strong></p>
     <p>The above content is derived from the following Newsletters:</p>
     <ul>
         {''.join(newsletter_links)}
@@ -39,6 +39,9 @@ def create_signature(save_path):
 
 if __name__ == "__main__":
 
+    ##########################################################
+    ################### WEEKEND HANDLING #####################
+    ##########################################################
     # Saturday cleanup
     if datetime.now().weekday() == 5:  
         print("It's Saturday, time for a clean up!")
@@ -70,6 +73,10 @@ if __name__ == "__main__":
     else:
         print("It's a weekday, let's get to work!")
     
+
+    ##########################################################
+    ################### ENV VARIABLES #######################
+    ##########################################################
     load_dotenv()
 
     EMAIL = os.getenv("EMAIL")
@@ -78,11 +85,29 @@ if __name__ == "__main__":
     CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
     RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
 
-    today = datetime.now().strftime('%Y-%m-%d')  
-    print(f"Today's date: {today}")
-    save_path = Path(__file__).parent.parent / f"email_content_{str(today)}"
-    manager = YahooEmailManager(EMAIL, APP_PASSWORD)
+    ##########################################################
+    ################### DATES AND PATHS #####################
+    ##########################################################
+    today = datetime.now()
+    str_today = today.strftime('%Y-%m-%d')  
+    print(f"Today's date: {str_today}")
     
+    if today.weekday() == 0:  # Monday
+        last_workday = today - timedelta(days=3)  # Friday
+    else:
+        last_workday = today - timedelta(days=1)  # Yesterday
+
+    str_last_workday = last_workday.strftime('%Y-%m-%d')
+    print(f"Last workday's date: {str_last_workday}")
+
+    save_path = Path(__file__).parent.parent / f"email_content_{str_today}"
+    yesterday_path = Path(__file__).parent.parent / f"email_content_{str(str_last_workday)}"
+
+    manager = YahooEmailManager(EMAIL, APP_PASSWORD)
+
+    ##########################################################
+    ################### READ NEW EMAILS #####################
+    ##########################################################    
     if manager.connect():
         print("Connected to Yahoo email successfully!")
         save_path.mkdir(parents=True, exist_ok=True)
@@ -108,14 +133,27 @@ if __name__ == "__main__":
         print(f"Content is of adequate length: {len(content.strip())}.")
         content = f"<input_text>{content}</input_text>"
 
+    ##########################################################
+    ################### CLAUDE API CALL ###################
+    ##########################################################
+    if yesterday_path.exists():
+        with open(yesterday_path / "llm_output.txt", 'r', encoding='utf-8') as f:
+            yesterday_summary = f.read()
+    else:
+        yesterday_summary = "no summary available"
+
     # Call Claude API
     claude_api = ClaudeSonnetAPI(CLAUDE_API_KEY)
-    result = claude_api.process_content(content)
+    result = claude_api.process_content(content, yesterday_summary)
 
     with open(save_path / "llm_output.txt", 'w', encoding='utf-8') as f:
         f.write(result)
 
     print("Claude API call successful.")
+
+    ##########################################################
+    ####################### SEND EMAIL #######################
+    ##########################################################
 
     with open(save_path / "llm_output.txt", 'r', encoding='utf-8') as f:
         content = f.read()
@@ -123,6 +161,15 @@ if __name__ == "__main__":
     # Add signature and credits
     signature = create_signature(save_path)
     content += signature
+
+    # Fix the font in the HTML
+    content = content.replace("<h3>", '<h3 style="font-family: Arial, Helvetica, sans-serif; color: #333;">')
+    content = content.replace("<h2>", '<h2 style="font-family: Arial, Helvetica, sans-serif; color: #333;">')
+    content = content.replace("<p>", '<p style="font-family: Arial, Helvetica, sans-serif;">')
+    content = content.replace("<ul>", '<ul style="font-family: Arial, Helvetica, sans-serif;">')
+
+    with open(save_path / "test.html", 'w', encoding='utf-8') as f:
+        f.write(content)
 
     success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
 
@@ -132,3 +179,5 @@ if __name__ == "__main__":
         print("Failed to send email.")
         # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
         # text_to_speech.transform_content(content)
+
+    exit(1)
