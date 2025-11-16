@@ -42,36 +42,36 @@ if __name__ == "__main__":
     ##########################################################
     ################### WEEKEND HANDLING #####################
     ##########################################################
-    # Saturday cleanup
-    if datetime.now().weekday() == 5:  
-        print("It's Saturday, time for a clean up!")
+    # # Saturday cleanup
+    # if datetime.now().weekday() == 5:  
+    #     print("It's Saturday, time for a clean up!")
 
-        # get the directory
-        base_dir = Path(__file__).parent.parent
+    #     # get the directory
+    #     base_dir = Path(__file__).parent.parent
 
-        # Identify email_content folders
-        folders = [f for f in base_dir.iterdir() if f.is_dir() and f.name.startswith("email_content_")]
+    #     # Identify email_content folders
+    #     folders = [f for f in base_dir.iterdir() if f.is_dir() and f.name.startswith("email_content_")]
         
-        # Nothing to clean up
-        if len(folders) <= 1:
-            exit(1)  
+    #     # Nothing to clean up
+    #     if len(folders) <= 1:
+    #         exit(1)  
 
-        # Sort by folder name 
-        folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
-        # Keep the most recent, delete the rest
-        for folder in folders_sorted[1:]:
-            shutil.rmtree(folder)
-            print(f"Removed old folder: {folder}")
+    #     # Sort by folder name 
+    #     folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
+    #     # Keep the most recent, delete the rest
+    #     for folder in folders_sorted[1:]:
+    #         shutil.rmtree(folder)
+    #         print(f"Removed old folder: {folder}")
 
-        exit(1)
+    #     exit(1)
 
-    # Sunday do nothing
-    elif datetime.now().weekday() == 6: 
-        print("It's Sunday, well deserved break!")
-        exit(1)
-    # If it's a weekday, execute the code
-    else:
-        print("It's a weekday, let's get to work!")
+    # # Sunday do nothing
+    # elif datetime.now().weekday() == 6: 
+    #     print("It's Sunday, well deserved break!")
+    #     exit(1)
+    # # If it's a weekday, execute the code
+    # else:
+    #     print("It's a weekday, let's get to work!")
     
 
     ##########################################################
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     print(f"Last workday's date: {str_last_workday}")
 
     save_path = Path(__file__).parent.parent / f"email_content_{str_today}"
-    yesterday_path = Path(__file__).parent.parent / f"email_content_{str(str_last_workday)}"
+    yesterday_path = Path(__file__).parent.parent / f"email_content_{str_last_workday}"
 
     manager = YahooEmailManager(EMAIL, APP_PASSWORD)
 
@@ -136,11 +136,14 @@ if __name__ == "__main__":
     ##########################################################
     ################### CLAUDE API CALL ###################
     ##########################################################
-    if yesterday_path.exists():
-        with open(yesterday_path / "llm_output.txt", 'r', encoding='utf-8') as f:
+    yesterday_text = yesterday_path / "llm_output.txt"
+    if yesterday_text.exists():
+        print("Found yesterday's summary.")
+        with open(yesterday_text, 'r', encoding='utf-8') as f:
             yesterday_summary = f.read()
     else:
         yesterday_summary = "no summary available"
+        print("No summary found for yesterday, proceeding without it.")
 
     # Call Claude API
     claude_api = ClaudeSonnetAPI(CLAUDE_API_KEY)
@@ -168,15 +171,15 @@ if __name__ == "__main__":
     content = content.replace("<p>", '<p style="font-family: Arial, Helvetica, sans-serif;">')
     content = content.replace("<ul>", '<ul style="font-family: Arial, Helvetica, sans-serif;">')
 
-    with open(save_path / "test.html", 'w', encoding='utf-8') as f:
+    with open(save_path / "body_sent.html", 'w', encoding='utf-8') as f:
         f.write(content)
 
-    success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
+    # success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
 
-    if success:
-        print("Email sent successfully.")
-    else:
-        print("Failed to send email.")
+    # if success:
+    #     print("Email sent successfully.")
+    # else:
+    #     print("Failed to send email.")
         # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
         # text_to_speech.transform_content(content)
 
