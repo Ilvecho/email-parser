@@ -42,36 +42,36 @@ if __name__ == "__main__":
     ##########################################################
     ################### WEEKEND HANDLING #####################
     ##########################################################
-    # # Saturday cleanup
-    # if datetime.now().weekday() == 5:  
-    #     print("It's Saturday, time for a clean up!")
+    # Saturday cleanup
+    if datetime.now().weekday() == 5:  
+        print("It's Saturday, time for a clean up!")
 
-    #     # get the directory
-    #     base_dir = Path(__file__).parent.parent
+        # get the directory
+        base_dir = Path(__file__).parent.parent
 
-    #     # Identify email_content folders
-    #     folders = [f for f in base_dir.iterdir() if f.is_dir() and f.name.startswith("email_content_")]
+        # Identify email_content folders
+        folders = [f for f in base_dir.iterdir() if f.is_dir() and f.name.startswith("email_content_")]
         
-    #     # Nothing to clean up
-    #     if len(folders) <= 1:
-    #         exit(1)  
+        # Nothing to clean up
+        if len(folders) <= 1:
+            exit(1)  
 
-    #     # Sort by folder name 
-    #     folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
-    #     # Keep the most recent, delete the rest
-    #     for folder in folders_sorted[1:]:
-    #         shutil.rmtree(folder)
-    #         print(f"Removed old folder: {folder}")
+        # Sort by folder name 
+        folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
+        # Keep the most recent, delete the rest
+        for folder in folders_sorted[1:]:
+            shutil.rmtree(folder)
+            print(f"Removed old folder: {folder}")
 
-    #     exit(1)
+        exit(1)
 
-    # # Sunday do nothing
-    # elif datetime.now().weekday() == 6: 
-    #     print("It's Sunday, well deserved break!")
-    #     exit(1)
-    # # If it's a weekday, execute the code
-    # else:
-    #     print("It's a weekday, let's get to work!")
+    # Sunday do nothing
+    elif datetime.now().weekday() == 6: 
+        print("It's Sunday, well deserved break!")
+        exit(1)
+    # If it's a weekday, execute the code
+    else:
+        print("It's a weekday, let's get to work!")
     
 
     ##########################################################
@@ -174,12 +174,12 @@ if __name__ == "__main__":
     with open(save_path / "body_sent.html", 'w', encoding='utf-8') as f:
         f.write(content)
 
-    # success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
+    success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
 
-    # if success:
-    #     print("Email sent successfully.")
-    # else:
-    #     print("Failed to send email.")
+    if success:
+        print("Email sent successfully.")
+    else:
+        print("Failed to send email.")
         # text_to_speech = TTS(UNREAL_SPEECH_API, save_path)
         # text_to_speech.transform_content(content)
 
