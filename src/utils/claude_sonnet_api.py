@@ -1,5 +1,4 @@
 import requests
-import os
 
 SYSTEM_PROMPT = """
 <task>
@@ -11,9 +10,10 @@ The user is passionate about AI and follows developments in the field out of gen
 </context>
 
 <input>
-You will receive two pieces of information:
-1. Today's content from multiple AI/tech newsletters (within <today> tags). Each newsletter section in today's content starts and ends with "#+#" and the first line after "#+#" is the newsletter title.
+You will receive:
+1. Today's content from multiple AI/tech newsletters (within <today> tags). Each newsletter section starts with "#+#" and the first line after "#+#" is the newsletter title (e.g., "The Neuron", "The Rundown AI", "TLDR AI", "Too Long; Don't Read").
 2. Previous day's output summary (within <yesterday> tags).
+3. A numbered list of source links (within <sources> tags) mapping [N] to newsletter name and URL.
 </input>
 
 <output_requirements>
@@ -21,10 +21,10 @@ You will receive two pieces of information:
 - Language: Plain, concise language without unnecessary adjectives/adverbs
 - Focus: Maximum information density in minimum time
 - Perspective: European AI enthusiast
-- Citations: Include source citations for each piece of news using the format [X] where:
-  - The Neuron = [1]
-  - The Rundown AI = [2]
-  - TL;DR = [3]
+- Citations: Use [N] numbers from the <sources> block. Match the citation to the newsletter name of the section the content came from. If the same newsletter appears multiple times in <sources>, use the lowest-numbered occurrence for that newsletter.
+- Hyperlinks: When source content contains markdown-style links [text](url), render them as HTML <a href="url">text</a> tags in your output. Preserve inline links naturally within sentences.
+- Article source links: TLDR newsletter articles end with a [Read more](url) marker. This URL is the article's primary source. When covering that story, embed the URL as a hyperlink on a relevant word or phrase within your prose — for example on the company name, product name, or the key action described. Do NOT use "Read more" as the anchor text, and do NOT place the link as a trailing element at the end of your paragraph.
+- When multiple sources provide different URLs for the same story, prefer the most authoritative primary source (official company blog, research paper, official announcement page) over secondary analysis or news aggregators.
 </output_requirements>
 
 <duplicate_detection>
@@ -70,10 +70,10 @@ LOW PRIORITY (minimal/skip):
 <structure_requirements>
 1. Organize by individual news stories, keeping all information about each development together, excluding stories already covered in yesterday's summary
 2. Only merge news stories that cover the exact same topic/announcement
-3. Always include "Prompt Tip of the Day" from "The Neuron" newsletter almost verbatim (remove only non-prompt-related content)
+3. Always include the "AI Skill of the Day" section from "The Neuron" newsletter as "Prompt Tip of the Day" almost verbatim (remove only non-prompt-related content)
 4. Lead with most impactful developments in AI capabilities and industry changes
 5. Include specific metrics (performance gains, pricing, etc.) when relevant
-6. Add appropriate source citation [1], [2], or [3] at the end of each news item or paragraph
+6. Add appropriate source citation [N] at the end of each news item or paragraph
 7. When including stories that build upon yesterday's news, clearly indicate they are updates (e.g., "Following yesterday's announcement...")
 </structure_requirements>
 
@@ -96,14 +96,16 @@ When covering new developments, consider:
 
 <format>
 Output must be valid HTML suitable for copying into an email. Organize into exactly three sections:
-1. Major News (no section title): Cover significant developments that warrant detailed coverage (more than a couple sentences). Each story should have a short, meaningful title using <h3> tags followed by content in <p> tags. Include source citation [X] at the very end of the last sentence without any line breaks (e.g., "the sentence ends now. [1]").
+1. Major News (no section title): Cover significant developments that warrant detailed coverage (more than a couple sentences). Each story should have a short, meaningful title using <h3> tags followed by content in <p> tags. Preserve inline hyperlinks from source material as <a href="..."> tags within the text. Include source citation [N] at the very end of the last sentence without any line breaks (e.g., "the sentence ends now. [1]").
 
-2. Other News: Brief updates using <h2>Other News</h2> heading followed by <ul> and <li> tags for bullet points. Include source citation [X] at the very end of each bullet point without any line breaks (e.g., "the sentence ends now. [2]").
+2. Other News: Brief updates using <h2>Other News</h2> heading followed by <ul> and <li> tags for bullet points. Preserve inline hyperlinks as <a href="..."> tags. Include source citation [N] at the very end of each bullet point without any line breaks (e.g., "the sentence ends now. [2]").
 
-3. Prompt Tip of the Day: Use <h2>Prompt Tip of the Day</h2> heading followed by content in <p> tags. Include "The Neuron" newsletter's prompt tip almost verbatim, removing only non-prompt-related content.
+3. Prompt Tip of the Day: Use <h2>Prompt Tip of the Day</h2> heading followed by content in <p> tags. Include "The Neuron" newsletter's "AI Skill of the Day" content almost verbatim, removing only non-prompt-related content.
+
 Use proper HTML structure with <p> tags for paragraphs, <strong> tags for emphasis where needed, and ensure all tags are properly closed. Ensure every piece of information includes the appropriate source citation.
 </format>
 """
+
 
 class ClaudeSonnetAPI:
     def __init__(self, api_key: str, api_url: str = "https://api.anthropic.com/v1/messages"):
@@ -115,9 +117,13 @@ class ClaudeSonnetAPI:
             "anthropic-version": "2023-06-01"
         }
 
-    def process_content(self, today_content: str, yesterday_summary: str) -> str:
-
-        input_content = f"<today>\n{today_content}\n</today>\n<yesterday>\n{yesterday_summary}\n</yesterday>"
+    def process_content(self, today_content: str, yesterday_summary: str, sources: str = "") -> str:
+        sources_block = f"<sources>\n{sources}\n</sources>" if sources else ""
+        input_content = (
+            f"<today>\n{today_content}\n</today>\n"
+            f"<yesterday>\n{yesterday_summary}\n</yesterday>\n"
+            f"{sources_block}"
+        )
 
         payload = {
             "model": "claude-sonnet-4-20250514",
@@ -128,22 +134,14 @@ class ClaudeSonnetAPI:
             ]
         }
         response = requests.post(self.api_url, headers=self.headers, json=payload)
-        # print(response.text)
         response.raise_for_status()
 
-        if response.status_code != 200:
-            raise Exception(f"Error from Claude API: {response.status_code} - {response.text}") 
-        
-        # Extract the content
         data = response.json()
-
-        assert data['model'] == "claude-sonnet-4-20250514", "Unexpected model in response"
         assert data['stop_reason'] == "end_turn", "Unexpected stop reason in response"
         assert data['type'] == "message", "Unexpected response type"
 
-        response = data['content'][0]['text']
-        if not response:
+        result = data['content'][0]['text']
+        if not result:
             raise ValueError("Empty response from Claude API")
 
-        return response
-
+        return result

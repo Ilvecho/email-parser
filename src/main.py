@@ -42,36 +42,35 @@ if __name__ == "__main__":
     ##########################################################
     ################### WEEKEND HANDLING #####################
     ##########################################################
-    # Saturday cleanup
-    if datetime.now().weekday() == 5:  
-        print("It's Saturday, time for a clean up!")
+    # # Saturday cleanup
+    # if datetime.now().weekday() == 5:
+    #     print("It's Saturday, time for a clean up!")
 
-        # get the directory
-        base_dir = Path(__file__).parent.parent
+    #     # get the directory
+    #     base_dir = Path(__file__).parent.parent
 
-        # Identify email_content folders
-        folders = [f for f in base_dir.iterdir() if f.is_dir() and f.name.startswith("email_content_")]
-        
-        # Nothing to clean up
-        if len(folders) <= 1:
-            exit(1)  
+    #     # Identify email_content folders
+    #     folders = [f for f in base_dir.iterdir() if f.is_dir() and f.name.startswith("email_content_")]
 
-        # Sort by folder name 
-        folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
-        # Keep the most recent, delete the rest
-        for folder in folders_sorted[1:]:
-            shutil.rmtree(folder)
-            print(f"Removed old folder: {folder}")
+    #     # Nothing to clean up
+    #     if len(folders) <= 1:
+    #         exit(1)
 
-        exit(1)
+    #     # Sort by folder name
+    #     folders_sorted = sorted(folders, key=lambda x: x.name, reverse=True)
+    #     # Keep the most recent, delete the rest
+    #     for folder in folders_sorted[1:]:
+    #         shutil.rmtree(folder)
+    #         print(f"Removed old folder: {folder}")
 
-    # Sunday do nothing
-    elif datetime.now().weekday() == 6: 
-        print("It's Sunday, well deserved break!")
-        exit(1)
-    # If it's a weekday, execute the code
-    else:
-        print("It's a weekday, let's get to work!")
+    #     exit(1)
+
+    # # Sunday do nothing
+    # elif datetime.now().weekday() == 6:
+    #     print("It's Sunday, well deserved break!")
+    #     exit(1)
+
+    # print("It's a weekday, let's get to work!")
     
 
     ##########################################################
@@ -111,7 +110,7 @@ if __name__ == "__main__":
     if manager.connect():
         print("Connected to Yahoo email successfully!")
         save_path.mkdir(parents=True, exist_ok=True)
-        manager.parse_emails(num_emails=10, save_path=save_path)
+        manager.parse_emails(num_emails=35, save_path=save_path)
         manager.disconnect()
         print("Email content extraction completed!")
 
@@ -119,7 +118,8 @@ if __name__ == "__main__":
         # target_path = save_path / "english.txt"
         # with open(target_path, 'a', encoding='utf-8') as f:
         #     f.write(f'\n\n\n*Thank you for listening, until next time!*')
-
+    exit(1)
+    
     with open(save_path / "english.txt", 'r', encoding='utf-8') as f:
         content = f.read()
 
@@ -145,9 +145,21 @@ if __name__ == "__main__":
         yesterday_summary = "no summary available"
         print("No summary found for yesterday, proceeding without it.")
 
+    # Build numbered source list from read_online_urls.txt for dynamic citations
+    sources = ""
+    links_path = save_path / "read_online_urls.txt"
+    if links_path.exists():
+        with open(links_path, "r", encoding="utf-8") as f:
+            entries = [l.strip() for l in f if l.strip() and "=" in l]
+        sources = "\n".join(
+            f"[{idx}] {name.strip()} = {url.strip()}"
+            for idx, line in enumerate(entries, 1)
+            for name, url in [line.split("=", 1)]
+        )
+
     # Call Claude API
     claude_api = ClaudeSonnetAPI(CLAUDE_API_KEY)
-    result = claude_api.process_content(content, yesterday_summary)
+    result = claude_api.process_content(content, yesterday_summary, sources)
 
     with open(save_path / "llm_output.txt", 'w', encoding='utf-8') as f:
         f.write(result)
@@ -173,6 +185,8 @@ if __name__ == "__main__":
 
     with open(save_path / "body_sent.html", 'w', encoding='utf-8') as f:
         f.write(content)
+
+    exit(1)
 
     success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
 

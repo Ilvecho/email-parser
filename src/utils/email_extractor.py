@@ -1,6 +1,7 @@
 import imaplib
 import email
 import smtplib
+import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from utils import ParseEmails                       # My utils
@@ -8,7 +9,7 @@ from utils import ParseEmails                       # My utils
 
 TARGET_ADDRESS_ENG = [
     "theneuron@newsletter.theneurondaily.com",      # The Neuron - AI (ENG)
-    "joe@readthejoe.com",                           # The Average Joe - Business and Finance(ENG)
+    # "joe@readthejoe.com",                           # The Average Joe - Business and Finance(ENG)
     "news@daily.therundown.ai",                     # The rundown - AI (ENG)
     "therundownai@mail.beehiiv.com",                # The rundown - AI (ENG)
     "dan@tldrnewsletter.com",                       # TL;DR - AI and tech (ENG)
@@ -128,8 +129,8 @@ class YahooEmailManager:
                 # Extract subject (title)
                 subject = message['subject'] if message['subject'] else ""
 
-                # Skip if subject contains "PODCAST"
-                if "PODCAST" in subject:
+                # Skip live-session promo emails (low news content)
+                if "LIVE" in subject:
                     continue
             
                 # If not in scope, skip
@@ -177,10 +178,18 @@ class YahooEmailManager:
         msg["Subject"] = subject
         msg.attach(MIMEText(html_body, "html"))
 
-        # Send the email
-        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
-            server.login(self.email_address, self.password)
-            server.sendmail(self.email_address, recipient, msg.as_string())
+        # Send the email (retry up to 3 times on transient connection errors)
+        for attempt in range(3):
+            try:
+                with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+                    server.login(self.email_address, self.password)
+                    server.sendmail(self.email_address, recipient, msg.as_string())
+                break
+            except (ConnectionResetError, smtplib.SMTPException) as e:
+                if attempt == 2:
+                    raise
+                print(f"SMTP attempt {attempt + 1} failed: {e}. Retrying in 5 seconds...")
+                time.sleep(5)
 
         return True
 
