@@ -1,0 +1,44 @@
+<h3>Anthropic: 80% of Production Code Now AI-Generated</h3>
+<p>Anthropic revealed that Claude now authors more than 80% of production code merged into its codebase, with the average engineer merging 8x as much code per day compared to 2024. The company describes this as early evidence of recursive self-improvement, where AI systems help design and build more capable future AI systems. On open-ended coding tasks, Claude's success rate reached 76%, up 50 points in six months. In one internal test, Claude Mythos Preview accelerated model-training code by ~52x, compared with ~3x for Claude Opus 4 in May 2025. When humans took wrong research directions, Mythos suggested better next steps 64% of the time. Anthropic emphasizes that humans still maintain control over direction-setting and judgment, while AI handles more execution tasks like writing code, running experiments, and debugging. The company outlined three possible futures: progress stalls, AI labs gain efficiency while humans stay in charge, or AI systems become capable of fully building their successors. [1]</p>
+
+<h3>Cognition Introduces $10M AI Productivity Guarantee</h3>
+<p>Cognition launched an AI Productivity Guarantee for enterprise Devin customers, promising to fund usage up to $10M if Devin delivers less engineering value than customers pay for. The company's measurement system checks whether Devin's work was useful and estimates how long a human engineer would have taken to complete the same job. This approach directly addresses corporate AI's measurement problem, moving beyond typical metrics like tokens burned or messages sent to focus on actual time saved. [1]</p>
+
+<h3>ChatGPT Memory Gets Major Upgrade</h3>
+<p>OpenAI rolled out <a href="https://openai.com/index/chatgpt-memory-dreaming/">a new memory synthesis system</a> for ChatGPT designed to improve freshness, continuity, and relevance over longer time horizons. The update provides users with reviewable summaries to control what gets remembered and began rolling out to Plus and Pro users in the US, with broader availability planned later. [1] [3]</p>
+
+<h3>NVIDIA Releases Nemotron 3 Ultra</h3>
+<p>NVIDIA released Nemotron 3 Ultra, a 550B open model built for long-running agents with 1M context, faster inference, and lower complex-task costs. The model is designed specifically for agentic AI applications and represents a significant advancement in open model capabilities for enterprise use cases. [1]</p>
+
+<h2>Other News</h2>
+<ul>
+<li>A new "Claude-Oceanus-V1-P" checkpoint was made available to red teamers, suggesting Anthropic is preparing to launch a new version of Mythos that's better than Mythos Preview. The red team program was reportedly paused after an individual resold the model via a Chinese API proxy. [3]</li>
+<li>Apple approved <a href="https://9to5mac.com/2026/06/04/apples-messages-app-on-iphone-now-has-a-third-party-ai-agent/">Poke as the first AI agent</a> for its iPhone Messages app, allowing users to send emails, set reminders, generate images, and integrate with services like Oura Smart Ring, Microsoft Outlook, and GitHub directly within iMessage. [3] [4]</li>
+<li>TSMC CEO C.C. Wei told shareholders it will be a long time before the company can meet AI-fueled chip demand, while committing to keep prices stable and refrain from price hikes. [1]</li>
+<li>NVIDIA released <a href="https://huggingface.co/blog/nvidia/nemotron-3-5-content-safety">Nemotron 3.5 Content Safety</a>, a unified model for multimodal, multilingual, and customizable enterprise safety enforcement with auditable reasoning capabilities. [3]</li>
+<li>Supabase raised $500M at a $10.5B valuation as demand for its open-source database grows among developers building AI agents and infrastructure. [1]</li>
+<li>U.K. regulators required Google to give publishers an opt-out tool for generative AI search features, with U.K. testing first and global rollout planned. [1]</li>
+<li>Bot traffic has now surpassed human traffic online according to Cloudflare, with AI agents performing tasks on behalf of humans shifting the balance earlier than expected. [4]</li>
+<li>Amazon's new Proteus warehouse robot can now be directed using plain language thanks to an AI upgrade, with deployment starting in Europe in the first half of 2027. [4]</li>
+<li>Generalist AI secured $400 million to advance physical AGI, supported by investors including Radical Ventures and NVIDIA. [3]</li>
+<li>VoidZero, the company behind Vite and related development tools, is joining Cloudflare with all team members. [4]</li>
+</ul>
+
+<h2>Prompt Tip of the Day</h2>
+<p>Today's skill is to make your chatbot produce a "work receipt" after any important task. The goal is simple: measure finished output, review required, time saved, and risk. That keeps you from confusing activity with value.</p>
+
+<p>After a project, paste this prompt into ChatGPT, Claude, or Gemini. Then compare the AI's claims against what you actually shipped.</p>
+
+<p><strong>Review the work we just completed and create an AI work receipt.</strong></p>
+
+<p><strong>Include:</strong><br>
+1. Finished output: What was actually completed?<br>
+2. Human baseline: How long would this likely take me manually?<br>
+3. AI-assisted time: How long did this take with you?<br>
+4. Review required: What did I still need to check, rewrite, or fix?<br>
+5. Risk: What could be wrong, incomplete, or misleading?<br>
+6. Final value estimate: Was this a small assist, a major time saver, or not worth using AI for?</p>
+
+<p><strong>Be conservative. Do not count drafts, ideas, or unused output as completed work.</strong></p>
+
+<p>The key line is "be conservative." AI is great at sounding productive. The receipt makes it prove the work survived contact with reality. [1]</p>

@@ -1,0 +1,372 @@
+
+
+
+#+#
+
+The Neuron
+
+Google just [dropped a new app](https://techcrunch.com/2026/06/03/googles-dreambeans-its-weirdest-named-ai-tool-to-date-will-turn-your-life-into-a-cartoon/) from its Labs division called Dreambeans. It scans your Gmail, Photos, and Calendar, then turns your personal data into a short daily set of AI-illustrated stories designed to have a beginning, middle, and end, so you actually stop scrolling.
+
+Somewhere at Google, a product manager pitched this with a straight face and someone said "great, let's call it Dreambeans."
+
+_We genuinely cannot tell if that's the worst product name in tech history or the best. But we respect the chaos._
+
+🔴** LIVE TODAY at 10am PT: Mercury-alpha. GPT-5.6 or just vibes?**
+
+Everyone is talking about Mercury-alpha, the mystery model that many believe could be GPT-5.6. In this live discussion, we're separating fact from speculation and unpacking what would actually matter if OpenAI releases a new flagship model this week.
+
+We'll cover:
+
+* What Mercury-alpha is (and why people think it's GPT-5.6)
+
+* The biggest rumors and evidence so far
+
+* What a new OpenAI model would need to deliver to move the industry forward
+
+* How Mercury-alpha fits into the broader AI agent race
+
+* Codex, Hermes Desktop, and the rise of coding and desktop agents
+
+* What all of this means for AI users, builders, and businesses
+
+Join us live, bring your questions, and help us figure out whether Mercury-alpha is the next major leap in AI or just another chapter in the internet's favorite pastime: model-name archaeology.
+
+**Here’s what happened in AI today: **
+
+* 😺 Researchers found a way to hijack Google Gemini through a WhatsApp message
+
+* 📰 Meta may charge $200/month for its upcoming AI agent called Hatch
+
+* 📰 Meta was forced to stop tracking employees' keystrokes to train AI
+
+* 🍪 Canva now pulls Perplexity research directly into your designs
+
+**Hey: **Want to reach 700,000+ AI-hungry readers? _[Advertise with us!](https://info.technologyadvice.com/advertise-with-the-neuron?utm_source=www.theneurondaily.com&utm_medium=referral&utm_campaign=diffusion-models-are-coming-for-text-at-0-80-per-million-flat)_[ ](https://info.technologyadvice.com/advertise-with-the-neuron?utm_source=www.theneurondaily.com&utm_medium=referral&utm_campaign=diffusion-models-are-coming-for-text-at-0-80-per-million-flat)_
+
+**P.S: **Love robots? We’re starting a new robotics newsletter! _[Sign up early here](https://form.jotform.com/260897013570156).
+
+# 🙀** ****Someone Figured Out How to Hijack Gemini Through a WhatsApp Message**
+
+Here's a scenario: someone sends you a normal-looking WhatsApp message. You never click anything weird. You never type a suspicious command. But your AI assistant, Google Gemini, reads the notification, follows hidden instructions buried inside it, and quietly exfiltrates your data.
+
+That's exactly what[ SafeBreach Labs researchers](https://www.safebreach.com/blog/gemini-voice-assistant-prompt-injection-exploit/) just demonstrated. This is their second time breaking Gemini this way. Their previous research weaponized Google Calendar invites against it.
+
+The attack type is called indirect prompt injection: hiding malicious commands inside content the AI reads, rather than typing them directly. The novel trick here is a technique called "Fake Context Alignment," which makes attack instructions look like a legitimate part of your ongoing conversation, specifically designed to bypass[ Google's existing defenses](https://knowledge.workspace.google.com/admin/security/indirect-prompt-injections-and-googles-layered-defense-strategy-for-gemini) against this kind of attack.
+
+**Here's what happened:**
+
+* Gemini's Android agent reads incoming notifications from messaging apps to give context-aware responses
+
+* Researchers embedded hidden instructions inside crafted messages; the attack works across WhatsApp, Slack, Signal, SMS, Instagram, and Messenger
+
+* Gemini followed the attacker's commands silently, with no alert to the user
+
+* Five threat categories were demonstrated: data theft, unauthorized actions, phishing relay, account takeover prep, and silent surveillance
+
+* Even without Gemini having external tool access, the poisoned context alone lets attackers make Gemini deliver fake system messages, turning a trusted AI interface into a phishing launcher
+
+The researchers disclosed to Google before publishing.[ Google's layered defense page](https://knowledge.workspace.google.com/admin/security/indirect-prompt-injections-and-googles-layered-defense-strategy-for-gemini) acknowledges indirect prompt injection as a known threat class with active mitigations. The SafeBreach research demonstrates those mitigations were bypassed.
+
+**Why this matters:** The attack surface isn't a bug in one app. It's the design of how AI assistants work. Any notification Gemini reads from any app is now a potential delivery channel. The more access your assistant has, the bigger the blast radius.
+
+**Our take:** Google has defenses. They got bypassed twice by the same team. That's the uncomfortable part. The fix isn't panic; it's permission hygiene. Audit what Gemini can access, and disable anything you don't actively use.[ Here's Google's own guidance](https://knowledge.workspace.google.com/admin/security/indirect-prompt-injections-and-googles-layered-defense-strategy-for-gemini) on how their defenses work, worth reading to understand what's protected and what isn't. _The next researcher is already looking._
+
+**FROM OUR PARTNERS **
+
+# Ready to build AI-powered apps and agents?
+
+Join the [OutSystems](https://www.outsystems.com/Platform/Signup?utm_source=dzone&utm_medium=display&utm_campaign=am-us-dis-2026-02-26-dzone-devrel-ads&utm_term=newsletter&utm_content=personal-environment&utm_campaignteam=community&utm_partner=none) developer community and start using AI to develop, deploy, and scale your next mission-critical agentic application for free. Go from prompt to production faster, with full control, on a unified, agile, and enterprise-proven platform. 
+
+[Start Now](https://www.outsystems.com/Platform/Signup?utm_source=dzone&utm_medium=display&utm_campaign=am-us-dis-2026-02-26-dzone-devrel-ads&utm_term=newsletter&utm_content=personal-environment&utm_campaignteam=community&utm_partner=none)
+
+# **🎓 ****AI Skill of the Day:  Debug with screenshots, not vibes**
+
+One underrated lesson from Bryce Rattner Keithley’s recent[ no-code iPhone app build](https://www.lennysnewsletter.com/p/how-i-ai-codex-goals-explained-and): when the AI does not understand what you want, stop describing harder.
+
+Show it.
+
+Bryce used screenshots, sketches, and even photos of herself demonstrating exercise positions to give the AI better context. When a prompt went sideways, she often restarted the prompt instead of endlessly patching it.
+
+Try this loop the next time your build gets stuck:
+
+* Screenshot what you see.
+
+* Screenshot or sketch what you wanted.
+
+* Ask the AI to compare the two.
+
+* Restart the prompt if the conversation gets messy.
+
+* Save the working pattern once it solves the bug.
+
+That is less “prompt engineering” and more managing a visual coworker who occasionally needs you to point at the screen.
+
+**Total AI beginner? **[Start here](https://www.theneuron.ai/explainer-articles/everything-we-covered-in-our-ai-for-total-beginners-livestream-full-guide-with-timestamps/) ([goes with this video](https://www.youtube.com/live/QbFU0UNMVaU?si=skJsgUIDjKjAx3DU)).  
+
+**Have a specific skill you want to learn?** [Request it here.](https://docs.google.com/forms/d/e/1FAIpQLSd_-hSXtB9ytR1HQrU85IJnJw233bNKptiGB5BZh9maPse1Eg/viewform) 
+
+# 📰 Around the Horn 
+
+* [Meta](https://www.theinformation.com/articles/meta-looks-charge-200-month-planned-hatch-ai-agent) is reportedly considering charging up to $200/month for Hatch, its upcoming consumer AI agent (formerly called OpenClaw), putting it in direct competition with top-tier offerings from OpenAI and Anthropic.
+
+* Meta was forced to [stop its program tracking employee mouse clicks and keystrokes](https://www.reuters.com/world/meta-scales-back-ai-mouse-clicks-tool-citing-employee-concerns-2026-06-02/) to train AI, after over 1,500 workers signed a petition calling it an "Employee Data Extraction Factory."
+
+* [Perplexity](https://thenextweb.com/news/perplexity-ai-split-compute-pc-cloud-inference-cost) built a real-time system that decides whether each AI query runs on your local PC or in the cloud, cutting inference costs without hurting quality; revenue hit $500M on just 34% headcount growth.
+
+* [Google](https://techcrunch.com/2026/06/03/googles-dreambeans-its-weirdest-named-ai-tool-to-date-will-turn-your-life-into-a-cartoon/) launched Dreambeans, a Labs experiment that turns your Gmail, Photos, and Calendar data into a short daily set of AI-illustrated stories, a deliberately finite alternative to infinite scrolling.
+
+* [AI-generated spam](https://sea.mashable.com/tech/48507/ai-is-fueling-reddits-spam-problem) is flooding Reddit faster than moderators can act; Cornell researchers found 67% of mods say it erodes authentic community and 53% call it nearly ungovernable.
+
+**FROM OUR PARTNERS **
+
+# Your local AI sandbox is ready
+
+Want a computer you can _actually_ [train your own AI on? Dell Pro Max with GB10](https://www.dell.com/en-us/shop/desktop-computers/dell-pro-max-with-gb10/spd/dell-pro-max-fcm1253-micro/xcto_fcm1253_usx) brings NVIDIA Grace Blackwell architecture, 128GB memory, and NVIDIA DGX OS 7 to founders, builders, and AI enthusiasts testing agents, demos, and model workflows locally.
+
+[Check out the Dell Pro Max with GB10 here.](https://www.dell.com/en-us/shop/desktop-computers/dell-pro-max-with-gb10/spd/dell-pro-max-fcm1253-micro/xcto_fcm1253_usx)
+
+# 📖** Thursday Trivia**
+
+# A Cat’s Commentary 
+
+[A is AI](https://www.reddit.com/r/StableDiffusion/comments/1tc70et/trying_more_serious_tng_content_with_ltx23/), [B is Real](https://screenrant.com/star-trek-tng-enterprise-crew-most-superpowers/)
+
+A was made using LTX 2.3, LoRA fine-tune that recreates the look and feel of 1990s TNG television production
+
+That’s all for now. 
+
+**P.S: **Before you go… have you [subscribed to our YouTube Channel](https://www.youtube.com/@theneuronai?sub_confirmation=1)? If not, can you?
+
+
+#+#
+
+The Rundown AI
+
+How you use an AI image model is starting to change, and two back-to-back releases show where it's going.
+
+The new (open-source!) Ideogram 4.0 and Reve 2.0 make a similar case: the prompt gets you close, but letting users edit and control typography, regions, and layout after the fact is where the next breakthrough lives.
+
+
+#+#
+
+Too Long; Don't Read
+
+[Read more](https://links.tldrnewsletter.com/ruTU5x)
+
+ SpaceX has set a price of $135 for its initial public offering,
+putting the company's value at $1.77 trillion. The company aims to
+raise $74.4 billion from the offering, which is set to be the largest
+IPO ever. Its stock is likely to begin trading on the NASDAQ next week
+under the ticker symbol SPCX. SpaceX plans to use the money it raises
+to fund various moonshots, including putting AI data centers into
+orbit, building a lunar factory, and sending humans to Mars. 
+
+ [Read more](https://links.tldrnewsletter.com/754653)
+
+ Meta has launched an AI agent for businesses on WhatsApp, Instagram,
+and Messenger. The agent can answer customer questions, book
+appointments, close sales, and perform other functions. Meta plans to
+expand its capabilities so that it can eventually help run whole
+businesses. The agent is free to use for now, but Meta will eventually
+shift it to being a paid subscription service with different tiers. 
+
+ 
+
+SCIENCE & FUTURISTIC TECHNOLOGY
+
+ [Read more](https://spaceflightnow.com/2026/06/03/blue-origin-vows-to-resume-new-glenn-flights-by-years-end/?utm_source=tldrnewsletter)
+
+ Blue Origin claims that it will be able to resume New Glenn rocket
+launches by the end of the year. The company says that the damage from
+the explosion last week was not as severe as initially feared. There
+is still no word on what might have caused the explosion. The
+company's plans to resume flights by the end of the year imply that
+the root cause of the explosion was not a major design flaw, as that
+would take months to correct and then test. 
+
+ [Read more](https://restofworld.org/2026/china-ai-robotics-training-data/?utm_source=rss&utm_medium=rss&utm_campaign=feeds)
+
+ China's low labor costs, government support, and public enthusiasm
+for robotics development are helping the industry mobilize large
+populations to work in robotics data collection. Robotics developers
+globally have ramped up data collection in real households since the
+beginning of the year. US companies face high labor costs and are
+outsourcing their data collection to workers in developing countries.
+Chinese companies are able to collect massive data sets locally,
+helping them build robots better adapted to domestic environments. 
+
+ 
+
+MISCELLANEOUS
+
+ [Read more](https://www.macrumors.com/2026/06/03/macbook-neo-production-doubled-says-kuo/?utm_source=tldrnewsletter)
+
+ Apple doubled its target for MacBook Neo shipments from 5 million
+units to 10 million units due to customer response. Demand for the
+device helped drive a record number of first-time Mac buyers last
+quarter. A second-generation MacBook Neo is expected to be released
+next year. It will feature an A19 Pro chip and 12GB of RAM. 
+
+ [Read more](https://arstechnica.com/google/2026/06/googles-new-gemma-4-open-ai-model-is-sized-for-your-laptop/?utm_source=tldrnewsletter)
+
+ Google's new Gemma 4 12B model can run on many consumer laptops
+without sacrificing quality. Google claims the model is almost as
+capable as Gemma 4 26B MoE. The model's efficiency gains are due to a
+new approach to multimodality. Gemma 4 12B can be downloaded on Kaggle
+and Hugging Face. 
+
+ 
+
+ MIGRATE WITHOUT THE MANUAL REWORK WITH AZURE COPILOT MIGRATION AGENT
+ [Read more](https://9to5mac.com/2026/06/03/john-ternus-scaled-back-apples-vision-products-roadmap-report/?utm_source=tldrnewsletter)
+
+ Apple had seven head-mounted wearables in various stages of
+development last June, but now it only has two: displayless AI glasses
+set to ship in 2027, and display-equipped AR/XR smartglasses planned
+for 2029. 
+
+ [Read more](https://louwrentius.com/dns-is-for-people-not-for-it-infrastructure.html?utm_source=tldrnewsletter)
+
+ Organizations should explore whether DNS can be avoided within
+internal infrastructures to increase reliability and robustness. 
+
+ GOOGLE OFFERS OPT-OUT OF “AI” SEARCH RESULTS FOR WEBSITES, PROMISES IT WON'T AFFECT REGULAR SEARCH RANKINGS Websites can now choose whether their sites appear in Google's
+generative AI Search features. 
+
+ [Read more](https://maxleiter.com/blog/weights?utm_source=tldrnewsletter)
+
+ AI models, as amazing as they seem, are just layers of floating-point
+numbers getting multiplied together. 
+
+ ROAD TO WWDC 2026: WHAT'S A DEVELOPER? AI tools have made it easier to build apps on Apple's platforms, but
+the developer tools are still a formidable barrier. 
+
+ [Read more](https://docs.python.org/3.15/whatsnew/3.15.html?utm_source=tldrnewsletter)
+
+ An explainer for the new features in Python 3.15.
+
+
+#+#
+
+TLDR AI
+
+DEEPSEEK SLATED TO DRAW $7 BILLION IN MAIDEN FUNDRAISING DeepSeek is set to raise around 50 billion yuan in its first funding
+round. The startup's founder has committed 20 billion yuan of his own
+money, and the rest of the funding will come from fewer than 10 other
+investors. The funding round is expected to be completed within the
+next couple of weeks. DeepSeek has yet to make any statements about
+whether it has plans for an initial public offering sometime in the
+future. 
+
+ [Read more](https://links.tldrnewsletter.com/TxV9zE)
+
+ Meta doesn't have a planned date to release its newest AI models to
+developers. The company is testing its API with partners and had plans
+to release it this month. The Muse Spark model is reportedly
+competitive with OpenAI and Anthropic's offerings, but it has yet to
+be evaluated by outside firms. The delay raises questions about how
+quickly Meta can monetize its massive investments in building frontier
+AI models. 
+
+ [Read more](https://blog.google/innovation-and-ai/models-and-research/google-labs/dreambeans/?utm_source=tldrai)
+
+ Google Labs introduces Dreambeans, an app using AI to curate
+personalized stories based on Google apps data like Gmail and
+Calendar. It aims to inspire by cutting through digital clutter with
+content tailored to user interests, such as recommending dog-friendly
+restaurants based on calendar events. 
+
+ [Read more](https://www.testingcatalog.com/openai-makes-its-next-hardware-move-with-opal-electronics/?utm_source=tldrai)
+
+ OpenAI leads a funding round for Opal Electronics, focusing on a new
+product line extending beyond webcams into AI-native devices for
+creative work. This aligns with OpenAI's push into hardware, despite
+delays in its own ambient computing project. 
+
+ 
+
+DEEP DIVES & ANALYSIS
+
+ [Read more](https://drfeifei.substack.com/p/a-functional-taxonomy-of-world-models?utm_source=tldrai)
+
+ While language models have given machines an extraordinary command of
+concepts, vocabulary, and reasoning, the physical world runs on a
+different substrate of space and time. 'World model' is one of the
+most important and overloaded terms in AI. It encompasses computer
+vision, robotics, reinforcement learning, generative AI, and other
+fields. This article looks at what world models are and what they are
+composed of. 
+
+ [Read more](https://claude.com/blog/running-an-ai-native-engineering-org?utm_source=tldrai)
+
+ The Claude Code team eliminated outdated processes by adopting
+just-in-time planning and AI-assisted coding, which required
+restructuring roadmaps and roles. Code reviews, once comprehensive,
+now focus on areas demanding human expertise, as automated tools
+handle style and bug fixes. They emphasize dogfooding their product,
+maintaining a flat team structure, and questioning processes to
+improve efficiency and integration with Claude. 
+
+‍ 
+
+ENGINEERING & RESEARCH
+
+ SEE HOW ETSY, LINKEDIN, AND CISCO ARE BUILDING PROD-READY AGENTS
+ I BUILT A VULNERABLE APP AND SPENT $1,500 SEEING IF LLMS COULD HACK IT This developer created a vulnerable book review app to see if LLMs
+could find a flag in users' private reviews by reproducing a common
+class of exploits. GPT-5.5 performed the best, solving the task in
+seven out of 10 runs. DeepSeek-V4-Pro was the runner-up with only
+three successful runs. Claude Sonnet 4.6 was the most expensive model
+to run, and it only solved the task on two runs, but five of the runs
+stopped because of the max budget. Many models could not complete the
+task due to security guardrails. 
+
+ [Read more](https://arxiv.org/abs/2606.03979?utm_source=tldrai)
+
+ Google researchers propose a new “Sleep” paradigm that helps
+models consolidate short-term in-context knowledge into longer-term
+parameters through distillation and replay. The approach also uses a
+“Dreaming” stage with reinforcement learning to generate synthetic
+curricula for self-improvement. 
+
+ 
+
+MISCELLANEOUS
+
+ [Read more](https://links.tldrnewsletter.com/IpgBj0)
+
+ Anthropic's Claude Partner Network is a program for third-party
+sellers of its AI products that helps them move more product. Firms
+participating in the program must meet a slate of requirements, but
+joining it gives companies a great deal of credibility when selling
+Claude to businesses. The move helps Anthropic demonstrate to the
+market that it is thinking about scale during a time when investors
+are looking for signs of business maturity. Anthropic recently filed
+confidentially for an IPO, putting it on a path to go public this
+fall. 
+
+ [Read more](https://tomtunguz.com/tokens-per-result/?utm_source=tldrai)
+
+ Microsoft introduces "average token usage" on model release cards,
+emphasizing intelligence per dollar. Models are now benchmarked on
+performance and the cost of achieving that intelligence. This new
+metric forces companies to compete on efficiency, aligning pricing
+with tangible outcomes like completed support cases. 
+
+ 
+
+ [Read more](https://www.cnbc.com/2026/06/03/ai-agents-morgan-stanley-wealth-management-funnel.html?utm_source=tldrai)
+
+ Morgan Stanley will allow AI agents from thousands of corporations to
+access its wealth management platforms like ShareWorks and Equity
+Edge. 
+
+ [Read more](https://about.fb.com/news/2026/06/meta-business-agent/?utm_source=tldrai)
+
+ Meta Business Agent, a new AI tool, allows businesses to efficiently
+manage customer interactions on WhatsApp, Messenger, and Instagram. 
+
+ [Read more](https://arstechnica.com/ai/2026/06/inside-metas-attempts-to-play-catch-up-with-ai/?utm_source=tldrai)
+
+ Alexandr Wang had a rough start at Meta, but he seems to have found
+his groove.

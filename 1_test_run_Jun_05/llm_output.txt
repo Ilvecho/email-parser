@@ -1,0 +1,42 @@
+<h3>Anthropic's Claude Now Writes 80% of Company Code</h3>
+<p>Anthropic revealed that <a href="https://www.anthropic.com/institute/recursive-self-improvement">Claude now authors over 80% of production code</a> merged into its codebase, with engineers shipping 8x more code per day than in 2024. The company positions this as evidence of recursive self-improvement—AI systems helping build more capable successors. Internal tests show Claude achieving 76% success rates on open-ended coding tasks and speeding up model-training code by ~52x compared to previous versions. While humans retain control over research direction and judgment, Anthropic argues the execution layer is increasingly automated, potentially creating a tighter feedback loop for AI development. [1]</p>
+
+<h3>Cognition Guarantees AI Productivity with $10M Backing</h3>
+<p>AI coding company <a href="https://cognition.ai/blog/ai-guarantee">Cognition introduced an AI Productivity Guarantee</a> for enterprise Devin customers, promising to fund usage up to $10M if the AI delivers less engineering value than paid for. The guarantee measures whether Devin's work was useful and estimates equivalent human engineer time, addressing the corporate AI measurement challenge that typically relies on token usage and app opens rather than actual productivity gains. [1]</p>
+
+<h3>OpenAI Upgrades ChatGPT Memory System</h3>
+<p><a href="https://openai.com/index/chatgpt-memory-dreaming/">OpenAI rolled out a new ChatGPT memory system</a> that updates useful context over time and provides reviewable summaries for users to steer what gets remembered. The update began rolling out to Plus and Pro users in the US, with broader availability planned later. [3]</p>
+
+<h3>NVIDIA Releases Nemotron 3 Ultra with 1M Context</h3>
+<p>NVIDIA released <a href="https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Ultra-Technical-Report.pdf">Nemotron 3 Ultra</a>, a 550B open model designed for long-running agents with 1M context length, faster inference, and lower complex-task costs. The model targets enterprise agent infrastructure needs. [1]</p>
+
+<h2>Other News</h2>
+<ul>
+<li>TSMC CEO told shareholders it will take a long time to meet AI-fueled chip demand while planning to keep prices stable. [1]</li>
+<li>Anthropic appears preparing to launch a new version of Mythos that outperforms Mythos Preview, with a checkpoint model called Oceanus recently made available to red teamers ahead of typical public launch timelines. [3]</li>
+<li><a href="https://appleinsider.com/articles/26/06/04/first-ai-agent-for-messages-business-chat-approved-by-apple">Apple approved Poke</a>, a third-party AI assistant for use in iPhone Messages app, allowing users to send emails, set reminders, and generate images directly within iMessage. [4]</li>
+<li><a href="https://www.cnbc.com/2026/06/04/database-startup-supabase-raises-500-million-10point5-billion-valuation.html">Supabase raised $500M at a $10.5B valuation</a> as demand for agent infrastructure pushed its open-source database deeper into AI workflows. [1]</li>
+<li><a href="https://generalistai.com/blog/accelerating-the-next-phase-of-physical-ai">Generalist AI secured $400 million</a> to advance physical AGI, supported by investors including Radical Ventures and NVIDIA. [3]</li>
+<li>U.K. regulators required Google to provide publishers an opt-out tool for generative AI search features, testing in the U.K. before global rollout. [1]</li>
+<li><a href="https://www.engadget.com/2187338/amazons-new-proteus-warehouse-robot-is-fully-autonomous/">Amazon's upgraded Proteus robot</a> can now be directed using plain language, figuring out priority, route, and timing autonomously within fulfillment centers. [4]</li>
+<li>Bot traffic has now exceeded human traffic online according to Cloudflare, with agentic traffic reaching this milestone earlier than expected. [4]</li>
+</ul>
+
+<h2>Prompt Tip of the Day</h2>
+<p>Make your chatbot produce a "work receipt" after any important task to measure finished output, review required, time saved, and risk. This helps distinguish activity from actual value.</p>
+
+<p>After completing a project, paste this prompt into ChatGPT, Claude, or Gemini:</p>
+
+<p><strong>Review the work we just completed and create an AI work receipt.</strong></p>
+
+<p><strong>Include:</strong><br>
+1. Finished output: What was actually completed?<br>
+2. Human baseline: How long would this likely take me manually?<br>
+3. AI-assisted time: How long did this take with you?<br>
+4. Review required: What did I still need to check, rewrite, or fix?<br>
+5. Risk: What could be wrong, incomplete, or misleading?<br>
+6. Final value estimate: Was this a small assist, a major time saver, or not worth using AI for?</p>
+
+<p><strong>Be conservative. Do not count drafts, ideas, or unused output as completed work.</strong></p>
+
+<p>The key is being conservative—AI excels at sounding productive, but the receipt forces it to prove the work survived real-world application. [1]</p>

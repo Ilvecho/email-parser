@@ -1,0 +1,320 @@
+
+
+
+#+#
+
+The Neuron
+
+AI companies have spent the last two years asking enterprise buyers to believe in productivity based on demos, screenshots, and token bills. [Cognition](https://cognition.ai/blog/ai-guarantee) is adding a receipt.
+
+The company introduced an AI Productivity Guarantee for enterprise Devin customers: if Devin delivers less engineering value than you pay for, Cognition says it will fund your usage until it does, up to $10M. Cognition says its measurement system checks whether Devin’s work was useful, then estimates how long a human engineer would have taken to do the same job.
+
+That matters because corporate AI has been graded by the weirdest report card imaginable: tokens burned, messages sent, seats assigned, and charts that mostly prove someone opened the app. Cognition is asking the expensive question: did this save time? Somewhere, a CFO just whispered “finally” into a spreadsheet.
+
+**Here’s what happened in AI today: **
+
+* 🙀 Anthropic says Claude now writes 80% of its code
+
+* 📰 TSMC warned AI chip demand will outstrip supply for years
+
+* 📰 OpenAI upgraded ChatGPT memory with reviewable summaries
+
+* 🍪 Google brought Gemma 4 12B to laptop apps
+
+* 💡 Ethan Mollick argued humans must negotiate with agents
+
+**Hey: **Want to reach 700,000+ AI-hungry readers? _[Advertise with us!](https://info.technologyadvice.com/advertise-with-the-neuron?utm_source=www.theneurondaily.com&utm_medium=referral&utm_campaign=diffusion-models-are-coming-for-text-at-0-80-per-million-flat)_[ ](https://info.technologyadvice.com/advertise-with-the-neuron?utm_source=www.theneurondaily.com&utm_medium=referral&utm_campaign=diffusion-models-are-coming-for-text-at-0-80-per-million-flat)_
+
+**P.S: **Love robots? We’re starting a new robotics newsletter! _[Sign up early here](https://form.jotform.com/260897013570156).
+
+# 🙀** ****Anthropic says Claude is already helping build Claude.**
+
+Most people use AI to write emails, fix spreadsheets, or debug the kind of code that makes them briefly reconsider their career.
+
+[Anthropic](https://www.anthropic.com/institute/recursive-self-improvement) is using Claude on a more consequential loop: building AI itself.
+
+The company published a new Anthropic Institute post arguing that Claude is already accelerating AI development, and may be an early step toward recursive self-improvement, which means AI systems helping design and build more capable future AI systems.
+
+**Here’s what happened:**
+
+* Anthropic says **more than 80%** of production code merged into its codebase in May 2026 was authored by Claude.
+
+* The average Anthropic engineer now merges **8x as much code per day** as they did in 2024.
+
+* On Anthropic’s most open-ended coding tasks, Claude’s success rate reached **76%**, up 50 points in six months.
+
+* In one internal research test, Claude Mythos Preview sped up model-training code by **~52x**, compared with ~3x for Claude Opus 4 in May 2025.
+
+* In selected research sessions where humans took a wrong turn, Mythos suggested the better next step **64%** of the time.
+
+**Why this matters:**
+
+Anthropic’s argument is careful. The loop remains incomplete, and the company says recursive self-improvement is not inevitable.
+
+But the evidence shows a clear change inside frontier AI labs. AI development has two big parts: execution and judgment. Execution is writing code, running experiments, fixing bugs, and testing results. Judgment is deciding which problems matter, which results to trust, and when an idea is a dead end.
+
+Claude is getting much better at the execution layer. Anthropic says it can now write production code, debug live incidents, run experiments toward a fixed goal, and review human code for bugs before it ships.
+
+Humans still have the lead on direction-setting. That is the important boundary. If models keep improving at execution, each researcher can steer more work. If models also improve at research judgment, the feedback loop gets much tighter.
+
+Anthropic lays out three possible futures: progress stalls, AI labs keep compounding efficiency gains while humans stay in charge, or AI systems become capable of fully building their successors.
+
+**Our take:**
+The precise claim here is more interesting than “Claude wrote itself.”
+
+Anthropic is showing the human role narrowing in real time. First, humans typed the code. Then they directed and reviewed it. Next, they may spend most of their time choosing goals, checking outputs, and deciding which machine-run experiments deserve trust.
+
+That still leaves humans in the loop. It also makes the loop smaller.
+
+**FROM OUR PARTNERS **
+
+# The Neuron Exclusive: Invest in High-Potential AI Startups Like These
+
+_The Neuron _and [Alumni Ventures](https://www.av.vc/funds/aifirst/the-neuron?utm_medium=email&utm_source=tofu&utm_content=partner-follow-up&utm_campaign=TheNeuronJuneBSend) are giving readers early [access to high-growth startup opportunities](https://www.av.vc/funds/aifirst/the-neuron?utm_medium=email&utm_source=tofu&utm_content=partner-follow-up&utm_campaign=TheNeuronJuneBSend), including some of today’s most exciting AI, Deep Tech, Quantum Computing, and Cybersecurity companies co-invested alongside top VC firms like Andreessen Horowitz (a16z), Bessemer, & Y Combinator.
+
+You get:
+
+* Curated deal flow of high-potential AI Firststartups
+
+* [AV](https://www.av.vc/funds/aifirst/the-neuron?utm_medium=email&utm_source=tofu&utm_content=partner-follow-up&utm_campaign=TheNeuronJuneBSend) is already investing alongside elite lead venture firms in these deals
+
+* No cost to see deals
+
+* No obligation to invest
+
+Don’t miss your chance before access closes.
+
+[→ Join Alumni Ventures AI First Syndicate Today](https://www.av.vc/funds/aifirst/the-neuron?utm_medium=email&utm_source=tofu&utm_content=partner-follow-up&utm_campaign=TheNeuronJuneBSend)
+
+# **🎓 ****AI Skill of the Day: Make AI Show Its Work Receipt**
+
+Using AI more often is easy. Proving it helped is the hard part.
+
+Today’s skill is to make your chatbot produce a “work receipt” after any important task. The goal is simple: measure finished output, review required, time saved, and risk. That keeps you from confusing activity with value, which is the same trap Cognition is trying to solve with its Devin guarantee.
+
+After a project, paste this prompt into ChatGPT, Claude, or Gemini. Then compare the AI’s claims against what you actually shipped.
+
+```
+Review the work we just completed and create an AI work receipt.
+
+Include:
+1. Finished output: What was actually completed?
+2. Human baseline: How long would this likely take me manually?
+3. AI-assisted time: How long did this take with you?
+4. Review required: What did I still need to check, rewrite, or fix?
+5. Risk: What could be wrong, incomplete, or misleading?
+6. Final value estimate: Was this a small assist, a major time saver, or not worth using AI for?
+
+Be conservative. Do not count drafts, ideas, or unused output as completed work.
+```
+The key line is “be conservative.” AI is great at sounding productive. The receipt makes it prove the work survived contact with reality.
+
+**Total AI beginner? **[Start here](https://www.theneuron.ai/explainer-articles/everything-we-covered-in-our-ai-for-total-beginners-livestream-full-guide-with-timestamps/) ([goes with this video](https://www.youtube.com/live/QbFU0UNMVaU?si=skJsgUIDjKjAx3DU)).  
+
+**Have a specific skill you want to learn?** [Request it here.](https://docs.google.com/forms/d/e/1FAIpQLSd_-hSXtB9ytR1HQrU85IJnJw233bNKptiGB5BZh9maPse1Eg/viewform) 
+
+# 📰 Around the Horn 
+
+* [TSMC CEO](https://www.tomshardware.com/tech-industry/semiconductors/tsmc-ceo-c-c-wei-says-it-will-be-a-long-time-before-we-can-meet-customer-demand-tells-shareholders-that-he-will-keep-prices-stable-refrain-from-implementing-price-hikes) C.C. Wei told shareholders it will take a long time to meet AI-fueled chip demand, while saying the company plans to keep prices stable.
+
+* [OpenAI](https://openai.com/index/chatgpt-memory-dreaming/) rolled out a new ChatGPT memory system that updates useful context over time and gives users a reviewable summary to steer what gets remembered. 
+
+* [NVIDIA](https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Ultra-Technical-Report.pdf) released Nemotron 3 Ultra, a 550B open model built for long-running agents with 1M context, faster inference, and lower complex-task costs. Corey got early access to; [read his story on it here](https://www.theneuron.ai/explainer-articles/nemotron-3-ultra-is-fast-open-and-surprisingly-good-at-weird-instructions/).
+
+* [Supabase](https://www.cnbc.com/2026/06/04/database-startup-supabase-raises-500-million-10point5-billion-valuation.html) raised $500M at a $10.5B valuation as vibe-coding demand pushed its open-source database deeper into agent infrastructure.
+
+* [U.K. regulators](https://techcrunch.com/2026/06/03/publishers-will-be-able-to-opt-out-of-ai-search-thanks-to-new-regulation/) required Google to give publishers an opt-out tool for generative AI search features, with U.K. testing first and global rollout planned.
+
+* [1X](https://www.forbes.com/sites/johnkoetsier/2026/06/04/1x-launches-humanoid-robot-world-model-lab-you-cant-fine-tune-your-way-to-agi/) launched a World Model Lab for humanoid robots, arguing general-purpose robots need dedicated world models instead of fine-tuning alone.
+
+**FROM OUR PARTNERS **
+
+Build for global growth with language datasets that help you go to new markets faster. [Mozilla Data Collective](https://mozilladatacollective.com/datasets?utm_source=the-neuron&utm_medium=newsletter&utm_campaign=the-neuron-newsletter) offers 600+ documented datasets across 300+ languages, helping companies reach new customers and strengthen multilingual AI capabilities with consented, traceable datasets.
+
+[Browse and download free datasets](https://mozilladatacollective.com/datasets?utm_source=the-neuron&utm_medium=newsletter&utm_campaign=the-neuron-newsletter)
+
+# 💡** ****Intelligent Insights:**
+
+* [Co-Existence and the End of Co-Intelligence](https://www.oneusefulthing.org/p/co-existence-and-the-end-of-co-intelligence) (Ethan Mollick) argues that humans now need to decide when to hand work to agents, when to refuse help, and when to keep judgment in charge.
+
+* [To Boldly Go: The Case for Space Datacenters](https://newsletter.semianalysis.com/p/to-boldly-go-the-case-for-space-datacenters) (SemiAnalysis) argues that orbital compute only starts making sense under severe earthbound power and chip constraints.
+
+* [A Compute Tax Is a REALLY Dumb Idea](https://www.economicforces.xyz/p/a-compute-tax-is-a-really-dumb-idea) (Brian Albrecht) argues that taxing compute targets a manipulable input while punishing capital and intermediate goods.
+
+* [Games between Programs](https://writings.stephenwolfram.com/2026/06/games-between-programs-the-ruliology-of-competition/) (Stephen Wolfram) explores why competition between programs can reward simple hacks, opaque strategies, and outcomes that are hard to predict.
+
+* [GSM-Symbolic](https://arxiv.org/pdf/2410.05229) (Apple researchers) shows how adding irrelevant details to grade-school math problems can sharply reduce model performance, a reminder that fluent reasoning can still be brittle.
+
+* [No, Artificial Intelligence Is Not Conscious](https://www.theatlantic.com/philosophy/2026/06/no-artificial-intelligence-is-not-conscious/687378/?gift=1ga2TvL-DbuHDQIcYF7oR7CsNA92bD_yo6VqlH7-uco&utm_source=copy-link&utm_medium=social&utm_campaign=share) (The Atlantic) argues that treating current AI systems as conscious creates moral confusion before the evidence is there.
+
+# A Cat’s Commentary 
+
+That’s all for now. 
+
+**P.S: **Before you go… have you [subscribed to our YouTube Channel](https://www.youtube.com/@theneuronai?sub_confirmation=1)? If not, can you?
+
+
+#+#
+
+The Rundown AI
+
+Recursive self-improvement used to sound like a far-off sci-fi phrase. Now, frontier labs say the signs are showing up internally faster than anyone expected.
+
+Anthropic's new report shows AI already accelerating the work that builds its own successors, and lays out the risks of systems that improve themselves… While also floating the jarring scenario of a coordinated development pause across the industry.
+
+
+#+#
+
+TLDR AI
+
+[CHATGPT DREAMING V3](https://links.tldrnewsletter.com/pyndCT)OpenAI introduced a new memory synthesis system for ChatGPT designed
+to improve freshness, continuity, and relevance over longer time
+horizons. The update began rolling out to Plus and Pro users in the
+US, with broader availability planned later. 
+
+[A NEW "CLAUDE-OCEANUS-V1-P" HAS BEEN MADE AVAILABLE TO RED TEAMS](https://threadreaderapp.com/thread/2062548860308730061.html?utm_source=tldrai)Anthropic appears to be gearing up for the public launch of a new
+version of Mythos that is better than Mythos Preview. A checkpoint of
+the model, codenamed Oceanus, was recently made available to red
+teamers. These programs typically begin a week before a wider launch.
+The program was apparently paused due to an individual in the program
+reselling the model via a Chinese API proxy. It is unknown whether
+this will impact the launch date. 
+
+[WHEN AI BUILDS ITSELF](https://www.anthropic.com/institute/recursive-self-improvement?utm_source=tldrai)Anthropic is expediting AI development by enabling AI systems to
+autonomously design and develop successors, a concept known as
+recursive self-improvement. Internal benchmarks show AI-driven
+processes allow typical engineers to ship eight times more code than
+in previous years. 
+
+ 
+
+[DEEP DIVES & ANALYSIS
+
+ HOW WE MADE CONTINUOUS TRACE INTELLIGENCE POSSIBLE AT SCALE](https://links.tldrnewsletter.com/3kcGtI)Braintrust founder Ankur Goyal lays out Topics, the intelligence
+layer for analyzing production agent traces at scale where
+million-token traces with hundreds of spans break every standard NLP
+tool that expects uniform document shapes. Inspired by Anthropic's
+Clio paper, the pipeline runs preprocess to facet to embed to cluster
+to name to classify, with the LLM summary doing the one job that makes
+the rest tractable since the raw trace never has to fit in an
+embedding model's context window. 
+
+[QWEN-IMAGE-FLASH](https://arxiv.org/abs/2606.03746?utm_source=tldrai)A study of few-step distillation for Qwen-Image-2.0 found that data
+composition, teacher guidance, and task mixture strongly affected
+student model performance. 
+
+‍ 
+
+[ENGINEERING & RESEARCH
+
+ NEMOTRON 3.5 CONTENT SAFETY](https://huggingface.co/blog/nvidia/nemotron-3-5-content-safety?utm_source=tldrai)NVIDIA released Nemotron 3.5 Content Safety, a unified model for
+multimodal, multilingual, and customizable enterprise safety
+enforcement. It supported auditable reasoning and was designed to fit
+into production moderation pipelines. 
+
+[MISCELLANEOUS
+
+ APPLE'S MESSAGES APP ON IPHONE NOW HAS A THIRD-PARTY AI AGENT](https://9to5mac.com/2026/06/04/apples-messages-app-on-iphone-now-has-a-third-party-ai-agent/?utm_source=tldrai)Apple approved the third-party AI service Poke for use in its iPhone
+Messages app. This integration allows users to chat with Poke directly
+in iMessage to perform various tasks. Some users report issues with
+response times, likely due to high demand. 
+
+[ANTHROPIC SAYS 80% OF ITS NEW PRODUCTION CODE IS NOW AUTHORED BY CLAUDE — HOW YOUR ENTERPRISE CAN CATCH UP](https://venturebeat.com/technology/anthropic-says-80-of-its-new-production-code-is-now-authored-by-claude-how-your-enterprise-can-keep-up?utm_source=tldrai)Anthropic reported that 80% of its production code now comes from its
+AI model, Claude, leading to an 8x increase in code volume per
+engineer. 
+
+ 
+
+[ACCELERATING THE NEXT PHASE OF PHYSICAL AI](https://generalistai.com/blog/accelerating-the-next-phase-of-physical-ai?utm_source=tldrai)Generalist AI secured $400 million to advance physical AGI, supported
+by investors like Radical Ventures and NVIDIA. 
+
+[EVA-BENCH DATA 2.0: 3 DOMAINS, 121 TOOLS, 213 SCENARIOS](https://huggingface.co/blog/ServiceNow-AI/eva-bench-data?utm_source=tldrai)EVA-Bench Data 2.0 expands its evaluation to three domains: Airline
+CSM, Enterprise ITSM, and Healthcare HRSD.
+
+
+#+#
+
+Too Long; Don't Read
+
+[FIRST AI AGENT FOR MESSAGES BUSINESS CHAT APPROVED BY APPLE](https://appleinsider.com/articles/26/06/04/first-ai-agent-for-messages-business-chat-approved-by-apple?utm_source=rss)AI assistant Poke is now available on iMessage via the Apple Messages
+for Business platform. Poke can send emails, set reminders, generate
+images, and more, from within the Apple Messages app. It is compatible
+with third-party services and products like the Oura Smart Ring,
+Microsoft Outlook, Gmail, GitHub, and Navan. Poke will conduct light
+actions, process manual prompts, and do background tasks for free, but
+any intensive requests will require payment, which can be negotiated. 
+
+ ANTHROPIC URGES GLOBAL PAUSE IN AI DEVELOPMENT, FLAGS
+‘SELF-IMPROVEMENT' RISK Anthropic claims that AI systems will soon be able to improve
+themselves without human intervention. This is seen by some AI
+insiders as a potential marker of danger and enormous societal
+upheaval. Anthropic has previously been criticized for using its
+policy work to slow down the AI advances of competitors. Its warnings
+about the dangerous potential of its own tools are seen by some as a
+marketing ploy. 
+
+ 
+
+[SCIENCE & FUTURISTIC TECHNOLOGY
+
+ AMAZON'S NEW PROTEUS WAREHOUSE ROBOT IS FULLY AUTONOMOUS](https://www.engadget.com/2187338/amazons-new-proteus-warehouse-robot-is-fully-autonomous/?utm_source=tldrnewsletter)Amazon's new Proteus robot can be directed by workers using plain
+language thanks to an AI upgrade. Workers just tell it what needs to
+be done, and it figures out the priority, route, and timing. The robot
+looks like a heavy-duty Roomba. It can move heavy carts and cover long
+distances within fulfillment centers. The new system is being piloted
+in Amazon's labs, with deployment starting in Europe in the first half
+of 2027. 
+
+[THE SKEPTIC'S GUIDE TO HUMANOID ROBOTS GOING VIRAL ON THE INTERNET](https://arstechnica.com/ai/2026/06/the-skeptics-guide-to-humanoid-robots-going-viral-on-the-internet/?utm_source=tldrnewsletter)A robot doing a dance move may seem cool, but it doesn't really say
+anything about how useful that robot is. One of the biggest challenges
+in robotics is developing robots that can generalize their skills
+across many different conditions and environments. Robotics
+demonstrations are typically in controlled environments, making it
+hard to tell whether capabilities can be replicated elsewhere. A real
+assessment of robotic capabilities requires conducting quantitative,
+large-scale evaluations in the real world. 
+
+ 
+
+[MISCELLANEOUS
+
+ SILICON CONTROL](https://silicon-frontier.com/research/silicon-control?utm_source=tldrnewsletter)Hardware is the real means of production in the AI race. Machine
+labor is far more scalable and cost-effective than human labor. The
+demand for machine labor will likely be truly infinite. The limiting
+factor will be the hardware to support it. This post discusses the few
+dozen companies that have a monopoly on the future of semiconductor
+manufacturing. 
+
+[AN INTERVIEW WITH MICROSOFT CEO SATYA NADELLA ABOUT FINDING CORE COMPETENCIES](https://stratechery.com/2026/an-interview-with-microsoft-ceo-satya-nadella-about-finding-core-competencies/?utm_source=tldrnewsletter)Microsoft CEO Satya Nadella was the sole presenter outside of product
+demos at the company's Build annual developer conference keynote,
+showing how he has shifted into a much more hands-on role at the
+company over the last year. This article features an interview with
+Nadella conducted shortly after the conclusion of the keynote where he
+discusses the company's competitive position, MAI models, OpenAI and
+capex, the software business, GitHub Copilot, and more. 
+
+ 
+
+ BE TLDR'S FIRST VP MARKETING ($300K-$400K, FULLY REMOTE) TLDR is hiring a VP of Marketing to scale growth, pipeline, and brand
+across 8M+ subscribers, 13 newsletters, and advertisers like AWS, Google Cloud, Microsoft, and Anthropic. Apply here . 
+
+[SPACEX, OTHER MEGA IPOS DENIED FAST INDEX ENTRY BY S&P](https://links.tldrnewsletter.com/Jw1Kpp)S&P Dow Jones Indices will not shorten its 12-month seasoning period
+for newly public companies or waive profitability and public-flowed
+requirements based on a company's size. 
+
+[BOTS HAVE NOW PASSED HUMAN TRAFFIC ONLINE](https://www.tomshardware.com/tech-industry/artificial-intelligence/bots-have-now-passed-human-traffic-online-cloudflare-boss-laments-says-agentic-traffic-wasnt-expected-to-eclipse-real-people-until-next-year?utm_source=tldrnewsletter)AI agents performing tasks on behalf of humans are shifting the
+balance between bot vs human traffic. 
+
+[ANTHROPIC SAYS 80% OF ITS NEW PRODUCTION CODE IS NOW AUTHORED BY CLAUDE — HOW YOUR ENTERPRISE CAN KEEP UP](https://links.tldrnewsletter.com/drWVWL)Enterprises looking to replicate Anthropic's 80% milestone need to
+shift from a 'developer assistant' mindset to an 'automated factory'
+architecture. 
+
+[META'S SMART GLASSES COMPANION APP SHIPS A COMPLETE, DORMANT FACE-RECOGNITION PIPELINE ON A STOCK ACCOUNT](https://www.buchodi.com/meta-glasses-facial-recognition/?utm_source=tldrnewsletter)There's no evidence that Meta is secretly identifying people users
+are looking at, but the apparatus for doing exactly that is present,
+assembled, and functional on the device. 
+
+[VOIDZERO IS JOINING CLOUDFLARE](https://blog.cloudflare.com/voidzero-joins-cloudflare/?utm_source=tldrnewsletter)All team members of VoidZero, the company behind Vite, Vitest,
+Rolldown, Oxc, and Vite+, are joining Cloudflare. 
+
+[WHAT GOOGLE DID TO WEBSITES IS HAPPENING TO YOUR APP RIGHT NOW](https://vinvashishta.substack.com/p/what-google-did-to-websites-is-happening?utm_source=tldrnewsletter)Google has transformed from a search engine that sends traffic to
+websites into an answer engine that removes the reason to visit one.

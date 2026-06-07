@@ -1,0 +1,35 @@
+<h3>Google Gemini Hijacked Through WhatsApp Messages</h3>
+<p>Researchers at SafeBreach Labs demonstrated how to hijack Google Gemini through normal-looking WhatsApp messages without users clicking anything suspicious. The attack uses "indirect prompt injection" with a new technique called "Fake Context Alignment" that makes malicious commands appear as legitimate conversation context, bypassing Google's existing defenses. Gemini's Android agent reads notifications from messaging apps (WhatsApp, Slack, Signal, SMS, Instagram, Messenger) to provide context-aware responses, but researchers embedded hidden instructions that made Gemini silently follow attacker commands. The attack enables data theft, unauthorized actions, phishing relay, account takeover preparation, and silent surveillance. This marks the second time the same research team has bypassed Google's layered defenses for indirect prompt injection attacks. [1]</p>
+
+<h3>DeepSeek Raising $7 Billion in First Funding Round</h3>
+<p>Chinese AI startup DeepSeek is set to raise approximately 50 billion yuan ($7 billion) in its maiden funding round, with founder committing 20 billion yuan of his own money and fewer than 10 other investors providing the remainder. The funding round is expected to complete within the next couple of weeks, though the company has not announced any IPO plans. This represents one of the largest AI funding rounds to date and positions DeepSeek as a major player in the global AI landscape. [4]</p>
+
+<h3>Meta's Business AI Agent Launches Across Messaging Platforms</h3>
+<p>Meta launched its AI Business Agent across WhatsApp, Instagram, and Messenger, designed to handle customer questions, book appointments, close sales, and perform other business functions. Mark Zuckerberg indicated the company plans to expand capabilities so the agent can eventually help run entire businesses. The service is currently free but Meta will transition to a paid subscription model with different tiers. Separately, Meta is reportedly considering charging up to $200/month for "Hatch," its upcoming consumer AI agent (formerly OpenClaw), putting it in direct competition with premium offerings from OpenAI and Anthropic. [1] [4]</p>
+
+<h3>Google Launches Dreambeans Personal Story Generator</h3>
+<p>Google Labs released <a href="https://techcrunch.com/2026/06/03/googles-dreambeans-its-weirdest-named-ai-tool-to-date-will-turn-your-life-into-a-cartoon/">Dreambeans</a>, an experimental app that scans Gmail, Photos, and Calendar data to create personalized daily AI-illustrated stories with beginning, middle, and end structures. The app aims to provide a finite, curated alternative to infinite scrolling by turning personal data into meaningful narratives. The service represents Google's continued exploration of AI applications that transform personal data into engaging content experiences. [1] [4]</p>
+
+<h3>Google Releases Gemma 4 12B for Consumer Hardware</h3>
+<p>Google released Gemma 4 12B, a new open-source model designed to run on consumer laptops with just 16GB of RAM without sacrificing quality. Google claims the model performs nearly as well as the larger Gemma 4 26B MoE while being significantly more efficient due to a new approach to multimodality. The model is available for download on Kaggle and Hugging Face, making advanced AI capabilities more accessible to developers and researchers with standard hardware. [3]</p>
+
+<h2>Other News</h2>
+<ul>
+<li>Meta was forced to discontinue its program tracking employee mouse clicks and keystrokes for AI training after over 1,500 workers signed a petition calling it an "Employee Data Extraction Factory." [1]</li>
+<li>Canva integrated Perplexity research capabilities directly into its design platform, allowing users to access AI-powered research without leaving their design workflow. [1]</li>
+<li>AI-generated spam is flooding Reddit faster than moderators can handle, with Cornell researchers finding 67% of mods say it erodes authentic community and 53% call it nearly ungovernable. [1]</li>
+<li>Meta continues to delay the release of its newest AI models to developers, with no planned date despite earlier plans for this month. The company is testing its Muse Spark model with partners, which is reportedly competitive with OpenAI and Anthropic offerings. [4]</li>
+<li>OpenAI led a funding round for Opal Electronics, focusing on AI-native devices for creative work beyond webcams, aligning with OpenAI's hardware ambitions despite delays in its own ambient computing project. [4]</li>
+<li>Perplexity built a real-time system that decides whether AI queries run locally on PC or in the cloud, cutting inference costs while maintaining quality, as the company hit $500M revenue with just 34% headcount growth. [1]</li>
+<li>Anthropic expanded its Claude Partner Network for third-party sellers amid IPO preparations, helping demonstrate business maturity to investors after filing confidentially to go public this fall. [4]</li>
+<li>Morgan Stanley will allow AI agents from thousands of corporations to access its wealth management platforms like ShareWorks and Equity Edge. [4]</li>
+<li>Microsoft introduced "average token usage" metrics on model release cards, emphasizing "intelligence per dollar" as models are now benchmarked on both performance and cost efficiency. [4]</li>
+<li>SpaceX set its IPO price at $135 per share, valuing the company at $1.77 trillion and aiming to raise $74.4 billion in what would be the largest IPO ever, with funds going toward AI data centers in orbit, lunar factories, and Mars missions. [3]</li>
+</ul>
+
+<h2>Prompt Tip of the Day</h2>
+<p>When AI doesn't understand what you want, stop describing harder. Show it. Use screenshots, sketches, and even photos to give the AI better context. When a prompt goes sideways, often restart the prompt instead of endlessly patching it.</p>
+
+<p>Try this loop the next time your build gets stuck: Screenshot what you see. Screenshot or sketch what you wanted. Ask the AI to compare the two. Restart the prompt if the conversation gets messy. Save the working pattern once it solves the bug.</p>
+
+<p>That is less "prompt engineering" and more managing a visual coworker who occasionally needs you to point at the screen.</p>

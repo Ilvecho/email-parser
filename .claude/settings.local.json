@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(venv/Scripts/python.exe -c \"import imaplib, email, smtplib, time; from email.mime.multipart import MIMEMultipart; from email.mime.text import MIMEText; from dotenv import load_dotenv; import anthropic; from bs4 import BeautifulSoup; print\\(''All core dependencies OK''\\)\")",
+      "Bash(venv/Scripts/pip install:*)",
+      "Bash(../../venv/Scripts/python.exe -c \":*)",
+      "Bash(/c/Users/massi/Documents/PythonProjects/email-parser/venv/Scripts/python.exe -c \":*)",
+      "Bash(powershell -Command \"Get-ExecutionPolicy\")"
+    ]
+  }
+}
