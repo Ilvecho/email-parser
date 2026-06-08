@@ -118,7 +118,6 @@ if __name__ == "__main__":
         # target_path = save_path / "english.txt"
         # with open(target_path, 'a', encoding='utf-8') as f:
         #     f.write(f'\n\n\n*Thank you for listening, until next time!*')
-    exit(1)
 
     with open(save_path / "english.txt", 'r', encoding='utf-8') as f:
         content = f.read()
