@@ -185,8 +185,6 @@ if __name__ == "__main__":
     with open(save_path / "body_sent.html", 'w', encoding='utf-8') as f:
         f.write(content)
 
-    exit(1)
-
     success = manager.send_yahoo_email(recipient=RECIPIENT_EMAIL, subject="Daily AI News", html_body=content)
 
     if success:
